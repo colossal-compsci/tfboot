@@ -1,0 +1,23 @@
+Package: tfboot
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Stephen",
+             family = "Turner",
+             email = "turner@colossal.com",
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0001-9140-9028")), 
+      person("Colossal Biosciences",
+             role = "cph"))
+Description: What the package does (one paragraph).
+License: file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+biocViews:
+Imports: 
+    GenomicRanges,
+    plyranges
+Suggests: 
+    BSgenome.Cfamiliaris.UCSC.canFam3,
+    TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
