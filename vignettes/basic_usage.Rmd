@@ -1,0 +1,150 @@
+---
+title: "Basic Usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{basic_usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  eval = FALSE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+## Motivation
+
+The [motifbreakR](https://bioconductor.org/packages/motifbreakR/) package provides functions to assess how single nucleotide polymorphisms (SNPs) disrupt transcript factor binding sites (TFBS). The tfboot package provides helper functions to aid in assessing the statistical significance of TFBS disruption in _interval sets_, typically defined by -5kb upstream promoter regions on genes of interest. 
+
+An example question might be: we have these 123 genes of interest that we think are important for XYZ phenotype. Can you assess the degree to which SNPs in the promoter region of these genes disrupt TFBS? Is this disruption in these 123 genes statistically significant as compared to SNPs from randomly selected sets of the same number of genes? 
+
+## Setup
+
+To run this vignette, you'll need the dog BSGenome, plyranges, and motifbreakR packages, which can be installed from bioconductor. You'll also need to install this tfboot package, which you can do from source, or directly from GitHub with your [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+
+```{r, eval=FALSE}
+install.packages("BiocManager")
+BiocManager::install(c("BSgenome.Cfamiliaris.UCSC.canFam3", "plyranges", "motifbreakR"), update=FALSE)
+BiocManager::install("https://github.com/stephenturner/TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq", update=FALSE)
+
+install.packages("devtools")
+devtools::install_github("https://github.com/colossal-compsci/tfboot", auth_token="REPLACE_WITH_YOUR_PAT", upgrade=FALSE)
+```
+
+# Basic usage
+
+First, load the libraries you need for this analysis. 
+
+```{r setup, message=FALSE}
+library(BSgenome.Cfamiliaris.UCSC.canFam3)
+library(TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
+library(plyranges)
+library(tfboot)
+library(motifbreakR)
+```
+
+Make life easier by assigning these long objects to short names.
+
+```{r}
+bs <- BSgenome.Cfamiliaris.UCSC.canFam3
+tx <- TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
+```
+
+Use `read_vcf()` to read in your VCF. The example used here is chromosome 38 from Kathleen's dog Rosie. Note that your VCF must be pre-filtered to only include variant sites. More information on how to do this can be found in the help page (`?read_vcf`).
+
+```{r}
+vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
+snps <- read_vcf(file=vcf_file, bsgenome=BSgenome.Cfamiliaris.UCSC.canFam3)
+snps
+```
+
+The `get_upstream_snps()` function from tfboot takes in a SNP list and a TxDb object, and turns intervals 5kb upstream of the transcription start site for all genes in the list. See the help for `?get_upstream_snps()` and the helper function it calls, `get_upstream()`. This function also respects strand information embedded in the genome. For an example on building a TxDb object from a GTF, see `?GenomicFeatures::makeTxDbPackage`. The code used to create the canFam3 TxDb object is [here on GitHub](https://github.com/stephenturner/TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq/tree/a95e7cf7275254696545c35efb0533831b48c42c#how-it-was-made).
+
+Here we get the 5kb upstream promoter region of _all_ genes with _any_ SNPs (limited to chromosome 38 in this example).
+
+```{r}
+prosnps <- get_upstream_snps(snps, txdb=tx)
+
+prosnps
+```
+
+Let's define a set of four genes of interest. We can then pull out SNPs in the 5kb promoter region of just those SNPs.
+
+```{r}
+mygenes <- c("RGS5", "NFASC", "CASQ1", "BPNT1")
+
+myprosnps <- 
+  prosnps |> 
+  filter(gene_id %in% mygenes)
+
+myprosnps
+```
+
+How many SNPs in the promoter region of each of my genes of interest?
+
+```{r}
+table(myprosnps$gene_id)
+```
+
+Now, let's run motifbreakR analysis with the 2022 JASPAR database. First let's look at the TFBS motifs. See `?MotifDb` for more info.
+
+```{r}
+motifs <- subset(MotifDb, dataSource=="jaspar2022")
+motifs
+```
+
+Now, let's run motifbreakR on these regions.
+
+```{r, eval=FALSE}
+mb_res <- motifbreakR(myprosnps, pwmList=motifs)
+```
+
+We could speed up the process by splitting the regions up by gene then running motifbreakR on each one of them. First let's use the tfboot `split_gr_by_id()` function to split this GenomicRanges object by ID (here, `"gene_id"`).
+
+Note that we have one element in this list for each gene, and they're all of class `GRanges`, as expected.
+
+```{r}
+myprosnps_list <- split_gr_by_id(myprosnps, split_col="gene_id")
+length(myprosnps_list)
+unique(lapply(myprosnps_list, class))
+```
+
+Now, let's use the tfboot `parallel_motifbreakR` to run the same code in parallel across these genes, using one core per gene. This uses the [furrr](https://furrr.futureverse.org/) package to map the `motifbreakR()` function over this list of promoter region SNPs. By default this will use all but one of the available CPUs on your machine. See the help for `?parallel_motifbreakR` for info on how to change this.
+
+```{r, eval=FALSE}
+mb_pois_list <- parallel_motifbreakR(myprosnps_list, pwmList=motifs)
+```
+
+This doesn't save much time with only `r length(mygenes)` genes. However, we can expand this analysis to all `r length(unique(prosnps$gene_id))` genes having SNPs on chromosome 38 for this sample.
+
+```{r}
+prosnps_list <- split_gr_by_id(prosnps, split_col="gene_id")
+length(prosnps_list)
+head(prosnps_list, 2)
+mb_res_all <- parallel_motifbreakR(prosnps_list, pwmList=motifs)
+```
+
+```{r}
+library(dplyr)
+mb_res |> 
+  as_tibble() |> 
+  select(SNP_id, gene_id, tf=geneSymbol, pctRef, pctAlt, scoreRef, scoreAlt, effect, alleleDiff, alleleEffectSize)
+```
+
+
+```{r, echo=FALSE, eval=FALSE}
+# Save the data
+save(mb_res, mb_res_all, file=here::here("inst/extdata/vignettedata.rd"))
+```
+
+# Assessing statistical signficance
+
+
