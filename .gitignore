@@ -10,3 +10,4 @@
 .Rdata
 .httr-oauth
 *.drawio.bkp
+inst/doc

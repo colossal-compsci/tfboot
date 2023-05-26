@@ -37,3 +37,6 @@ snps <- motifbreakR::snps.from.file(vcf_file, format="vcf", search.genome=bs)
 upstreamsnps <- snps %>% join_overlap_intersect(upstream)
 mb1 <- motifbreakR(snpList = upstreamsnps, pwmList = MotifDb, threshold = 0.9)
 mb1
+
+upstream |> split()
+

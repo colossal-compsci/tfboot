@@ -1,0 +1,93 @@
+---
+title: "Bootstrapping TFBS disruption"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bootstrap}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  eval = FALSE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+```{r, echo=FALSE}
+# load(here::here("inst/extdata/vignettedata.Rd"))
+load(system.file("extdata/vignettedata.rd", package="tfboot", mustWork = TRUE))
+```
+
+# Introduction
+
+
+```{r, eval=FALSE}
+install.packages("BiocManager")
+install.packages("devtools")
+BiocManager::install(c("BSgenome.Cfamiliaris.UCSC.canFam3", "plyranges", "motifbreakR"), update=FALSE)
+BiocManager::install("https://github.com/stephenturner/TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq", update=FALSE)
+devtools::install_github("https://github.com/colossal-compsci/tfboot", auth_token="REPLACE_WITH_YOUR_PAT")
+```
+
+
+```{r setup, message=FALSE}
+library(BSgenome.Cfamiliaris.UCSC.canFam3)
+library(TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
+library(plyranges)
+library(tfboot)
+library(motifbreakR)
+```
+
+```{r}
+bs <- BSgenome.Cfamiliaris.UCSC.canFam3
+tx <- TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
+```
+
+Subset SNPs in your genes
+
+```{r}
+vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
+snps <- read_vcf(vcf_file, BSgenome.Cfamiliaris.UCSC.canFam3)
+snps
+upstreamsnps <- get_upstream_snps(snps, txdb=tx)
+upstreamsnps
+```
+
+```{r}
+# genes of interest
+goi <- c("RGS5", "NFASC", "CASQ1", "BPNT1")
+# promoters of interest
+poi <- 
+  upstreamsnps |> 
+  filter(gene_id %in% goi)
+poi
+```
+
+Run motifbreakR analysis with JASPAR. 
+
+```{r, eval=FALSE}
+motifs <- subset(MotifDb, dataSource=="jaspar2022")
+mb_results <- motifbreakR(poi, pwmList=motifs)
+mb_results
+```
+
+Note that we see `r length(mb_results)` results for this set of `r length(goi)` genes. We could speed up the process by splitting the regions up by gene then running motifbreakR on each one of them.
+
+```{r, eval=FALSE}
+poi_list <- split_gr_by_id(poi, split_col="gene_id")
+poi_list
+mb_pois_list <- parallel_motifbreakR(poi_list, pwmList=motifs, threshold=0.9)
+```
+
+
+
+```{r, echo=FALSE}
+# Save the data
+save(mb.pois, file=here::here("inst/extdata/vignettedata.rd"))
+```
+
