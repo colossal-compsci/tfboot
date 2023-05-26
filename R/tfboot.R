@@ -116,7 +116,7 @@ get_upstream_snps <- function(snps, txdb, level="genes", ...) {
 #' @param gr A GRanges object returned by [get_upstream_snps].
 #' @param split_col The name of the column in `gr` to split by (default `gene_id`).
 #'
-#' @return FIXME
+#' @return A list of genomic ranges split by `split_col`.
 #' @export
 #'
 #' @examples
@@ -134,13 +134,13 @@ split_gr_by_id <- function(gr, split_col="gene_id") {
   return(grsplit)
 }
 
-#' Title
+#' Future map over motifbreakR
 #'
-#' @param grl FIXME
-#' @param cpus FIXME
-#' @param ... FIXME
+#' @param grl A list of GRanges objects.
+#' @param cpus The number of CPUs you want to run the analysis with. Defaults to the maximum number of cores, minus 1.
+#' @param ... Further arguments passed to [motifbreakR::motifbreakR].
 #'
-#' @return FIXME
+#' @return motifbreakR results as a list, one for each gene.
 #' @export
 #'
 #' @examples
