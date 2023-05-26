@@ -107,29 +107,10 @@ Now, let's run motifbreakR on these regions.
 mb_res <- motifbreakR(myprosnps, pwmList=motifs)
 ```
 
-We could speed up the process by splitting the regions up by gene then running motifbreakR on each one of them. First let's use the tfboot `split_gr_by_id()` function to split this GenomicRanges object by ID (here, `"gene_id"`).
-
-Note that we have one element in this list for each gene, and they're all of class `GRanges`, as expected.
+Additionally, let's run motifbreakR on _all_ SNPs for promoter regions in _all_ genes.
 
 ```{r}
-myprosnps_list <- split_gr_by_id(myprosnps, split_col="gene_id")
-length(myprosnps_list)
-unique(lapply(myprosnps_list, class))
-```
-
-Now, let's use the tfboot `parallel_motifbreakR` to run the same code in parallel across these genes, using one core per gene. This uses the [furrr](https://furrr.futureverse.org/) package to map the `motifbreakR()` function over this list of promoter region SNPs. By default this will use all but one of the available CPUs on your machine. See the help for `?parallel_motifbreakR` for info on how to change this.
-
-```{r, eval=FALSE}
-mb_pois_list <- parallel_motifbreakR(myprosnps_list, pwmList=motifs)
-```
-
-This doesn't save much time with only `r length(mygenes)` genes. However, we can expand this analysis to all `r length(unique(prosnps$gene_id))` genes having SNPs on chromosome 38 for this sample.
-
-```{r}
-prosnps_list <- split_gr_by_id(prosnps, split_col="gene_id")
-length(prosnps_list)
-head(prosnps_list, 2)
-mb_res_all <- parallel_motifbreakR(prosnps_list, pwmList=motifs)
+mb_all <- parallel_motifbreakR(prosnps_list, pwmList=motifs)
 ```
 
 ```{r}
