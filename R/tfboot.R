@@ -114,7 +114,7 @@ get_upstream_snps <- function(snps, txdb, level="genes", ...) {
 #' Splits a GRanges object into a GRangesList by a column (typically `gene_id`)
 #'
 #' @param gr A GRanges object returned by [get_upstream_snps].
-#' @param split_col The name of the column in `gr` to split by (default `gene_id`).
+#' @param key_col The name of the column in `gr` to split by (default `gene_id`).
 #'
 #' @return A list of genomic ranges split by `split_col`.
 #' @export
@@ -127,11 +127,30 @@ get_upstream_snps <- function(snps, txdb, level="genes", ...) {
 #'   plyranges::as_granges()
 #' gr
 #' split_gr_by_id(gr, split_col="gene_id")
-split_gr_by_id <- function(gr, split_col="gene_id") {
+split_gr_by_id <- function(gr, key_col="gene_id") {
   .Deprecated("motifbreakR(..., BPPARAM = bpparam())")
   stopifnot(inherits(gr, "GRanges"))
-  stopifnot(split_col %in% names(GenomicRanges::mcols(gr)))
-  grsplit <- split(gr, GenomicRanges::mcols(gr)[[split_col]])
+  stopifnot(key_col %in% names(GenomicRanges::mcols(gr)))
+  grsplit <- split(gr, GenomicRanges::mcols(gr)[[key_col]])
   return(grsplit)
 }
 
+#' motifbreakR results to tibble
+#'
+#' Make a compact tibble with only relevant columns from motifbreakR results
+#'
+#' @param mb motifbreakR results
+#' @param key_col The name of the column used to key the txdb. Default `gene_id`.
+#'
+#' @return
+#' @export
+mb_to_tibble <- function(mb, key_col="gene_id", ...) {
+  stopifnot(inherits(mb, "GRanges"))
+  standardcols <- c("SNP_id", "geneSymbol", "pctRef", "pctAlt", "scoreRef", "scoreAlt", "effect", "alleleDiff", "alleleEffectSize")
+  mycols <- c(key_col, standardcols)
+  stopifnot(all(mycols %in% colnames(GenomicRanges::mcols(mb))))
+  tib <- tibble::as_tibble(GenomicRanges::mcols(mb)[,mycols])
+  names(tib)[names(tib)=="geneSymbol"] <- "tf"
+  tib <- tib |> dplyr::arrange(.data$gene_id, .data$tf)
+  return(tib)
+}

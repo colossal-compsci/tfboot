@@ -12,11 +12,17 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
   message = FALSE,
-  eval = FALSE,
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
 ```
+
+```{r, echo=FALSE}
+# load the pre-cooked vignette data
+res <- tfboot::vignettedata$res
+all <- tfboot::vignettedata$all
+```
+
 
 # Introduction
 
@@ -104,26 +110,34 @@ motifs
 Now, let's run motifbreakR on these regions.
 
 ```{r, eval=FALSE}
-mb_res <- motifbreakR(myprosnps, pwmList=motifs)
+mbres <- motifbreakR(myprosnps, pwmList=motifs)
 ```
 
 Additionally, let's run motifbreakR on _all_ SNPs for promoter regions in _all_ genes.
 
-```{r}
-mb_all <- parallel_motifbreakR(prosnps_list, pwmList=motifs)
+```{r, eval=FALSE}
+mball <- parallel_motifbreakR(prosnps_list, pwmList=motifs)
+```
+
+Let's use tfboot's `mb_to_tibble()` function to create a compact tibble for each of these. We'll use this data for our statistical analysis coming up next.
+
+```{r, eval=FALSE}
+res <- mbres |> mb_to_tibble()
+all <- mball |> mb_to_tibble()
 ```
 
 ```{r}
-library(dplyr)
-mb_res |> 
-  as_tibble() |> 
-  select(SNP_id, gene_id, tf=geneSymbol, pctRef, pctAlt, scoreRef, scoreAlt, effect, alleleDiff, alleleEffectSize)
+res
+all
 ```
 
 
 ```{r, echo=FALSE, eval=FALSE}
 # Save the data
-save(mb_res, mb_res_all, file=here::here("inst/extdata/vignettedata.rd"))
+# vignettedata <- list()
+# vignettedata$res <- res
+# vignettedata$all <- all
+# usethis::use_data(vignettedata)
 ```
 
 # Assessing statistical signficance

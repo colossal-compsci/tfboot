@@ -4,15 +4,15 @@
 \alias{split_gr_by_id}
 \title{Split GRanges by gene}
 \usage{
-split_gr_by_id(gr, split_col = "gene_id")
+split_gr_by_id(gr, key_col = "gene_id")
 }
 \arguments{
 \item{gr}{A GRanges object returned by \link{get_upstream_snps}.}
 
-\item{split_col}{The name of the column in \code{gr} to split by (default \code{gene_id}).}
+\item{key_col}{The name of the column in \code{gr} to split by (default \code{gene_id}).}
 }
 \value{
-FIXME
+A list of genomic ranges split by \code{split_col}.
 }
 \description{
 Splits a GRanges object into a GRangesList by a column (typically \code{gene_id})

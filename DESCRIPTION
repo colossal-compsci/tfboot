@@ -16,14 +16,20 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 biocViews:
 Imports: 
+    dplyr,
     GenomicFeatures,
     GenomicRanges,
     motifbreakR,
     MotifDb,
-    plyranges
+    plyranges,
+    rlang,
+    tibble
 Suggests: 
     BSgenome.Cfamiliaris.UCSC.canFam3,
     knitr,
     rmarkdown,
     TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
 VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
+LazyData: true
