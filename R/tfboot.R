@@ -128,35 +128,10 @@ get_upstream_snps <- function(snps, txdb, level="genes", ...) {
 #' gr
 #' split_gr_by_id(gr, split_col="gene_id")
 split_gr_by_id <- function(gr, split_col="gene_id") {
+  .Deprecated("motifbreakR(..., BPPARAM = bpparam())")
   stopifnot(inherits(gr, "GRanges"))
   stopifnot(split_col %in% names(GenomicRanges::mcols(gr)))
   grsplit <- split(gr, GenomicRanges::mcols(gr)[[split_col]])
   return(grsplit)
 }
 
-#' Future map over motifbreakR
-#'
-#' @param grl A list of GRanges objects.
-#' @param cpus The number of CPUs you want to run the analysis with. Defaults to the maximum number of cores, minus 1.
-#' @param ... Further arguments passed to [motifbreakR::motifbreakR].
-#'
-#' @return motifbreakR results as a list, one for each gene.
-#' @export
-#'
-#' @examples
-parallel_motifbreakR <- function(grl, cpus=NULL, ...) {
-  stopifnot(inherits(grl, "list"))
-  stopifnot(inherits(grl[[1]], "GRanges"))
-  genome.package <- unique(unlist(lapply(grl, function(x) x@genome.package)))
-  stopifnot(length(genome.package)==1L)
-  maxcpus <- parallel::detectCores()-1
-  if (is.null(cpus) || cpus>maxcpus) cpus <- maxcpus
-  message(sprintf("Parallelizing using %s CPUs", cpus))
-  f <- function(x, ...) {
-    suppressMessages(loadNamespace(genome.package))
-    suppressMessages(loadNamespace("MotifDb"))
-    motifbreakR::motifbreakR(x, ...)
-  }
-  future::plan(future::multisession, workers=cpus)
-  furrr::future_map(grl, function(x) f(x, ...))
-}

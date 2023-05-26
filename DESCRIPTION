@@ -16,13 +16,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 biocViews:
 Imports: 
-    furrr,
-    future,
     GenomicFeatures,
     GenomicRanges,
     motifbreakR,
     MotifDb,
-    parallel,
     plyranges
 Suggests: 
     BSgenome.Cfamiliaris.UCSC.canFam3,
