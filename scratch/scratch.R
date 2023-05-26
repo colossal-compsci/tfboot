@@ -40,3 +40,44 @@ mb1
 
 upstream |> split()
 
+
+# statsig -----------------------------------------------------------------
+
+library(dplyr)
+res <- tfboot::vignettedata$res
+all <- tfboot::vignettedata$all
+summarize_mb <- function(x) {
+  x |>
+    dplyr::summarize(nsnps=dplyr::n(),
+                     nstrong=sum(effect=="strong"),
+                     alleleDiffAbsMean=mean(abs(alleleDiff)),
+                     alleleDiffAbsSum=sum(abs(alleleDiff)),
+                     alleleEffectSizeAbsMean=mean(abs(alleleEffectSize)),
+                     alleleEffectSizeAbsSum=sum(abs(alleleEffectSize)),
+    )
+}
+summarize_mb(res)
+ngenes <- length(unique(res$gene_id))
+allgenes <- unique(all$gene_id)
+boots=100
+bootwide <-
+  tibble::tibble(boot=1:1000, ngenes=ngenes) |>
+  dplyr::mutate(genes = purrr::map(ngenes, ~tibble::tibble(gene_id=sample(allgenes, size=., replace=TRUE)))) |>
+  dplyr::mutate(mbres = purrr::map(genes,  ~dplyr::inner_join(all, ., by="gene_id", relationship='many-to-many'))) |>
+  dplyr::mutate(mbsum = purrr::map(mbres, summarize_mb)) |>
+  dplyr::mutate(genes = purrr::map_chr(genes, function(x) paste(x[[1]], collapse=";"))) |>
+  tidyr::unnest_wider(col=mbsum)
+bootwide
+bootnest <-
+  bootwide |>
+  dplyr::select(-ngenes, -genes, -mbres) |>
+  tidyr::gather("metric", "bootdist", -boot) |>
+  group_by(metric) |>
+  summarize(bootdist=list(sort(c(bootdist))))
+bootnest
+res
+summarize_mb(res) |>
+  tidyr::gather("metric", "stat") |>
+  dplyr::inner_join(bootnest, by="metric") |>
+  mutate(max=purrr::map_dbl(bootdist, max)) |>
+  mutate(p=purrr::map2_dbl(stat, bootdist, function(x, y) sum(x<y)/length(y)))
