@@ -7,10 +7,13 @@
 mb_to_tibble(mb, key_col = "gene_id", ...)
 }
 \arguments{
-\item{mb}{motifbreakR results}
+\item{mb}{motifbreakR results GRanges object.}
 
-\item{key_col}{The name of the column used to key the txdb. Default \code{gene_id}.}
+\item{key_col}{The name of the column used to key the txdb. Default \code{gene_id}. May be \code{transcript_id} or otherwise if you use a different value of \code{level} in \link{get_upstream_snps}.}
+}
+\value{
+A tibble containing the key column (usually \code{gene_id}), and a select number of other columns needed for downstream statistical analysis.
 }
 \description{
-Make a compact tibble with only relevant columns from motifbreakR results
+Make a compact tibble with only select columns from motifbreakR results GRanges objects.
 }

@@ -15,14 +15,16 @@ split_gr_by_id(gr, key_col = "gene_id")
 A list of genomic ranges split by \code{split_col}.
 }
 \description{
-Splits a GRanges object into a GRangesList by a column (typically \code{gene_id})
+Splits a GRanges object into a GRangesList by a column (typically \code{gene_id}).
 }
 \examples{
+\dontrun{
 gr <- data.frame(seqnames=rep(c("chr1", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
            start=1:10,
            width=1,
            gene_id = rep(c("gene1", "gene2", "gene3", "gene4"), c(4, 2, 1, 3))) |>
   plyranges::as_granges()
 gr
-split_gr_by_id(gr, split_col="gene_id")
+split_gr_by_id(gr, key_col="gene_id")
+}
 }

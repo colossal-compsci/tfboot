@@ -19,8 +19,8 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 ```{r, echo=FALSE}
 # load the pre-cooked vignette data
-res <- tfboot::vignettedata$res
-all <- tfboot::vignettedata$all
+mbres <- tfboot::vignettedata$mbres
+mball <- tfboot::vignettedata$mball
 ```
 
 
@@ -53,8 +53,8 @@ First, load the libraries you need for this analysis.
 library(BSgenome.Cfamiliaris.UCSC.canFam3)
 library(TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
 library(plyranges)
-library(tfboot)
 library(motifbreakR)
+library(tfboot)
 ```
 
 Make life easier by assigning these long objects to short names.
@@ -82,11 +82,17 @@ prosnps <- get_upstream_snps(snps, txdb=tx)
 prosnps
 ```
 
-Let's define a set of four genes of interest. We can then pull out SNPs in the 5kb promoter region of just those SNPs.
+Now, let's select a set of five random genes of interest.
 
 ```{r}
-mygenes <- c("RGS5", "NFASC", "CASQ1", "BPNT1")
+set.seed(2341)
+mygenes <- sample(unique(prosnps$gene_id), 5)
+mygenes
+```
 
+We can then pull out SNPs in the 5kb promoter region of just those SNPs.
+
+```{r}
 myprosnps <- 
   prosnps |> 
   filter(gene_id %in% mygenes)
@@ -100,44 +106,50 @@ How many SNPs in the promoter region of each of my genes of interest?
 table(myprosnps$gene_id)
 ```
 
-Now, let's run motifbreakR analysis with the 2022 JASPAR database. First let's look at the TFBS motifs. See `?MotifDb` for more info.
+What's the median number of SNPs across _all_ genes? 
+
+```{r}
+median(table(prosnps$gene_id))
+```
+
+Now, let's run motifbreakR analysis with the 2022 JASPAR database on those `r length(mygenes)` genes. First let's look at the TFBS motifs. See `?MotifDb` for more info.
 
 ```{r}
 motifs <- subset(MotifDb, dataSource=="jaspar2022")
 motifs
 ```
 
-Now, let's run motifbreakR on these regions.
+Now, let's run motifbreakR on these SNPs in the promoter regions of these `r length(mygenes)` genes. The result of the motifbreakR analysis is a GenomicRanges object. 
 
 ```{r, eval=FALSE}
-mbres <- motifbreakR(myprosnps, pwmList=motifs)
+mbresGR <- motifbreakR(myprosnps, pwmList=motifs)
 ```
 
-Additionally, let's run motifbreakR on _all_ SNPs for promoter regions in _all_ genes.
+Additionally, let's run motifbreakR on _all_ SNPs for promoter regions in _all_ genes (remember, this entire analysis is restricted to chromosome 38 only).
 
 ```{r, eval=FALSE}
-mball <- parallel_motifbreakR(prosnps_list, pwmList=motifs)
+mballGR <- motifbreakR(prosnps, pwmList=motifs)
 ```
 
 Let's use tfboot's `mb_to_tibble()` function to create a compact tibble for each of these. We'll use this data for our statistical analysis coming up next.
 
 ```{r, eval=FALSE}
-res <- mbres |> mb_to_tibble()
-all <- mball |> mb_to_tibble()
+mbres <- mbresGR |> mb_to_tibble()
+mball <- mballGR |> mb_to_tibble()
 ```
 
 ```{r}
-res
-all
+mbres
+mball
 ```
 
 
 ```{r, echo=FALSE, eval=FALSE}
 # Save the data
-# vignettedata <- list()
-# vignettedata$res <- res
-# vignettedata$all <- all
-# usethis::use_data(vignettedata)
+vignettedata <- list()
+vignettedata$mbres <- mbres
+vignettedata$mball <- mball
+usethis::use_data(vignettedata, overwrite=TRUE)
 ```
 
 # Assessing statistical signficance

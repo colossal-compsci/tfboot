@@ -111,7 +111,7 @@ get_upstream_snps <- function(snps, txdb, level="genes", ...) {
 
 #' Split GRanges by gene
 #'
-#' Splits a GRanges object into a GRangesList by a column (typically `gene_id`)
+#' Splits a GRanges object into a GRangesList by a column (typically `gene_id`).
 #'
 #' @param gr A GRanges object returned by [get_upstream_snps].
 #' @param key_col The name of the column in `gr` to split by (default `gene_id`).
@@ -120,13 +120,15 @@ get_upstream_snps <- function(snps, txdb, level="genes", ...) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' gr <- data.frame(seqnames=rep(c("chr1", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
 #'            start=1:10,
 #'            width=1,
 #'            gene_id = rep(c("gene1", "gene2", "gene3", "gene4"), c(4, 2, 1, 3))) |>
 #'   plyranges::as_granges()
 #' gr
-#' split_gr_by_id(gr, split_col="gene_id")
+#' split_gr_by_id(gr, key_col="gene_id")
+#' }
 split_gr_by_id <- function(gr, key_col="gene_id") {
   .Deprecated("motifbreakR(..., BPPARAM = bpparam())")
   stopifnot(inherits(gr, "GRanges"))
@@ -137,20 +139,61 @@ split_gr_by_id <- function(gr, key_col="gene_id") {
 
 #' motifbreakR results to tibble
 #'
-#' Make a compact tibble with only relevant columns from motifbreakR results
+#' Make a compact tibble with only select columns from motifbreakR results GRanges objects.
 #'
-#' @param mb motifbreakR results
-#' @param key_col The name of the column used to key the txdb. Default `gene_id`.
+#' @param mb motifbreakR results GRanges object.
+#' @param key_col The name of the column used to key the txdb. Default `gene_id`. May be `transcript_id` or otherwise if you use a different value of `level` in [get_upstream_snps].
 #'
-#' @return
+#' @return A tibble containing the key column (usually `gene_id`), and a select number of other columns needed for downstream statistical analysis.
 #' @export
-mb_to_tibble <- function(mb, key_col="gene_id", ...) {
+#'
+#' @examples
+mb_to_tibble <- function(mb, key_col="gene_id") {
   stopifnot(inherits(mb, "GRanges"))
-  standardcols <- c("SNP_id", "geneSymbol", "pctRef", "pctAlt", "scoreRef", "scoreAlt", "effect", "alleleDiff", "alleleEffectSize")
+  standardcols <- c("SNP_id",
+                    "geneSymbol",
+                    "pctRef",
+                    "pctAlt",
+                    "scoreRef",
+                    "scoreAlt",
+                    "effect",
+                    "alleleDiff",
+                    "alleleEffectSize")
   mycols <- c(key_col, standardcols)
   stopifnot(all(mycols %in% colnames(GenomicRanges::mcols(mb))))
   tib <- tibble::as_tibble(GenomicRanges::mcols(mb)[,mycols])
   names(tib)[names(tib)=="geneSymbol"] <- "tf"
   tib <- tib |> dplyr::arrange(.data$gene_id, .data$tf)
+  class(tib) <- append(class(tib), "mbtibble")
   return(tib)
+}
+
+#' Summarize motifbreakR results
+#'
+#' Summarizes motifbreakR results as a tibble from [mb_to_tibble]. See details.
+#'
+#' Summarizes motifbreakR results. Returns a tibble with columns indicating:
+#' 1. `nsnps`: The number of SNPs total
+#' 1. `nstrong`: The number of SNPs with a "strong" effect
+#' 1. `alleleDiffAbsMean` The mean of the absolute values of the `alleleDiff` scores
+#' 1. `alleleDiffAbsSum` The sum of the absolute values of the `alleleDiff` scores
+#' 1. `alleleEffectSizeAbsMean` The mean of the absolute values of the `alleleEffectSize` scores
+#' 1. `alleleEffectSizeAbsSum` The sum of the absolute values of the `alleleEffectSize` scores
+#'
+#' @param mbtibble motifbreakR results summarized with [mb_to_tibble].
+#'
+#' @return A tibble. See description.
+#' @export
+#'
+#' @examples
+summarize_mb <- function(mbtibble) {
+  if (!inherits(mbtibble, "mbtibble")) warning("This function is usually called on the results of mb_to_tibble().")
+  mbtibble |>
+    dplyr::summarize(nsnps=dplyr::n(),
+                     nstrong=sum(.data$effect=="strong"),
+                     alleleDiffAbsMean=mean(abs(.data$alleleDiff)),
+                     alleleDiffAbsSum=sum(abs(.data$alleleDiff)),
+                     alleleEffectSizeAbsMean=mean(abs(.data$alleleEffectSize)),
+                     alleleEffectSizeAbsSum=sum(abs(.data$alleleEffectSize)),
+    )
 }
