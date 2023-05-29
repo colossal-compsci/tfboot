@@ -2,9 +2,12 @@
 
 export(get_upstream)
 export(get_upstream_snps)
+export(mb_bootstats)
+export(mb_bootstrap)
+export(mb_summarize)
 export(mb_to_tibble)
+export(plot_bootstats)
 export(read_vcf)
 export(split_gr_by_id)
-export(summarize_mb)
 importFrom(MotifDb,MotifDb)
 importFrom(rlang,.data)

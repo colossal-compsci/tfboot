@@ -4,7 +4,7 @@
 \alias{mb_to_tibble}
 \title{motifbreakR results to tibble}
 \usage{
-mb_to_tibble(mb, key_col = "gene_id", ...)
+mb_to_tibble(mb, key_col = "gene_id")
 }
 \arguments{
 \item{mb}{motifbreakR results GRanges object.}
@@ -16,4 +16,7 @@ A tibble containing the key column (usually \code{gene_id}), and a select number
 }
 \description{
 Make a compact tibble with only select columns from motifbreakR results GRanges objects.
+}
+\details{
+It's a good idea to run motifbreakR \emph{once} on the background set of \emph{all} genes and save this as an RData (or .rds) file, and read in when you need them.
 }

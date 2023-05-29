@@ -16,6 +16,10 @@ A list of genomic ranges split by \code{split_col}.
 }
 \description{
 Splits a GRanges object into a GRangesList by a column (typically \code{gene_id}).
+This function is deprecated and generally has no good use case. Originally
+written to split up a GRanges object into a list to iterate over using
+\code{furrr::future_map()}, but deprecated in favor of using built-in
+parallelization in motifbreakR.
 }
 \examples{
 \dontrun{

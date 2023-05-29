@@ -2,21 +2,21 @@
 % Please edit documentation in R/tfboot.R
 \name{get_upstream_snps}
 \alias{get_upstream_snps}
-\title{Get upstream SNPs}
+\title{Get SNPs in upstream regions}
 \usage{
 get_upstream_snps(snps, txdb, level = "genes", ...)
 }
 \arguments{
-\item{snps}{FIXME}
+\item{snps}{SNPs read in with \link{read_vcf}.}
 
-\item{txdb}{FIXME}
+\item{txdb}{A \link[GenomicFeatures:TxDb-class]{GenomicFeatures::TxDb} object with transcript annotations for the organism of interest. Must match the organism specified in the \code{bsgenome} argument of \link{read_vcf}.}
 
-\item{level}{FIXME}
+\item{level}{Currently only \code{"genes"} and \code{"transcripts"} are supported, which run \link[GenomicFeatures:transcripts]{GenomicFeatures::genes} and \link[GenomicFeatures:transcripts]{GenomicFeatures::transcripts}, respectively.}
 
-\item{...}{Additional arguments passed to \link{get_upstream}.}
+\item{...}{Additional arguments passed to \link{get_upstream} (e.g., \verb{width=}).}
 }
 \value{
-FIXME
+A GRanges object containing SNPs in regions upstream of intervals in the specified TxDb. See \link{get_upstream}.
 }
 \description{
 Get SNPs upstream of gene regions. Input SNPs read in with \link{read_vcf} and an appropriate TxDb object.

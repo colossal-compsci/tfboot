@@ -1,5 +1,5 @@
 Package: tfboot
-Title: What the Package Does (One Line, Title Case)
+Title: Bootstrapping and statistical analysis for TFBS-disrupting SNPs.
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Stephen",
@@ -9,8 +9,10 @@ Authors@R:
              comment = c(ORCID = "0000-0001-9140-9028")), 
       person("Colossal Biosciences",
              role = "cph"))
-Description: What the package does (one paragraph).
+Description: Bootstrap motifbreakR results for statistical analysis on TFBS-disrupting SNPs in upstream regions of a set of genes of interest.
 License: file LICENSE
+URL: https://github.com/colossal-compsci/tfboot
+BugReports: https://github.com/ropensci/postdoc/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -19,17 +21,23 @@ Imports:
     dplyr,
     GenomicFeatures,
     GenomicRanges,
+    ggplot2,
     motifbreakR,
     MotifDb,
     plyranges,
+    purrr,
     rlang,
-    tibble
+    tibble,
+    tidyr
 Suggests: 
     BSgenome.Cfamiliaris.UCSC.canFam3,
     knitr,
     rmarkdown,
     TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
+Remotes:
+    stephenturner/BSgenome.Cfamiliaris.UCSC.canFam3
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
 LazyData: true
+Language: en-US

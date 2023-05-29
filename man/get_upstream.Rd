@@ -12,7 +12,7 @@ get_upstream(gr, width = 5000L)
 \item{width}{Width of the upstream interval. Default 5000.}
 }
 \value{
-FIXME
+A GRanges object with intervals of width specified by \code{width} upstream of the start position of the \code{gr} input GRanges object.
 }
 \description{
 Get upstream intervals from a GRanges object.

@@ -12,10 +12,10 @@ read_vcf(file, bsgenome)
 \item{bsgenome}{An object of class BSgenome for the species you are interrogating; see \link[BSgenome:available.genomes]{BSgenome::available.genomes} for a list of species.}
 }
 \value{
-FIXME
+A GRanges object containing \code{SNP_id}, \code{REF}, and \code{ALT} columns.
 }
 \description{
-Helper function to read in data with \link[motifbreakR:snps.from.file]{motifbreakR::snps.from.file}
+Helper function to read in data with \link[motifbreakR:snps.from.file]{motifbreakR::snps.from.file}.
 }
 \details{
 Note that the VCF \strong{must} be filtered to only contain variant sites (i.e.,

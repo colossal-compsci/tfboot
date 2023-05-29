@@ -4,9 +4,17 @@
 \name{tfboot-package}
 \alias{tfboot}
 \alias{tfboot-package}
-\title{tfboot: What the Package Does (One Line, Title Case)}
+\title{tfboot: Bootstrapping and statistical analysis for TFBS-disrupting SNPs.}
 \description{
-What the package does (one paragraph).
+Bootstrap motifbreakR results for statistical analysis on TFBS-disrupting SNPs in upstream regions of a set of genes of interest.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/colossal-compsci/tfboot}
+  \item Report bugs at \url{https://github.com/ropensci/postdoc/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Stephen Turner \email{turner@colossal.com} (\href{https://orcid.org/0000-0001-9140-9028}{ORCID})
