@@ -1,6 +1,8 @@
 ---
 title: "Basic Usage"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{basic_usage}
   %\VignetteEngine{knitr::rmarkdown}
@@ -24,15 +26,15 @@ mball <- tfboot::vignettedata$mball
 ```
 
 
-# Introduction
+## Introduction
 
-## Motivation
+### Motivation
 
 The [motifbreakR](https://bioconductor.org/packages/motifbreakR/) package provides functions to assess how single nucleotide polymorphisms (SNPs) disrupt transcript factor binding sites (TFBS). The tfboot package provides helper functions to aid in assessing the statistical significance of TFBS disruption in _interval sets_, typically defined by -5kb upstream promoter regions on genes of interest. 
 
 An example question might be: we have these 123 genes of interest that we think are important for XYZ phenotype. Can you assess the degree to which SNPs in the promoter region of these genes disrupt TFBS? Is this disruption in these 123 genes statistically significant as compared to SNPs from randomly selected sets of the same number of genes? 
 
-## Setup
+### Setup
 
 To run this vignette, you'll need the dog BSGenome, plyranges, and motifbreakR packages, which can be installed from bioconductor. You'll also need to install this tfboot package, which you can do from source, or directly from GitHub with your [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
@@ -45,7 +47,7 @@ install.packages("devtools")
 devtools::install_github("https://github.com/colossal-compsci/tfboot", auth_token="REPLACE_WITH_YOUR_PAT", upgrade=FALSE)
 ```
 
-# Basic usage
+## Basic usage
 
 First, load the libraries you need for this analysis. 
 
@@ -152,6 +154,6 @@ vignettedata$mball <- mball
 usethis::use_data(vignettedata, overwrite=TRUE)
 ```
 
-# Assessing statistical signficance
+## Assessing statistical signficance
 
 
