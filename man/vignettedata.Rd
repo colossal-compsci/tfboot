@@ -11,7 +11,9 @@ An object of class \code{list} of length 2.
 vignettedata
 }
 \description{
-Pre-cooked data used by the vignette. Contains a list of two objects:
+Pre-cooked data used by the vignette. This data is precomputed
+to speed vignette compilation time and is used throughout the examples.
+Contains a list of two objects:
 \itemize{
 \item \code{mbres}: Results from running motifbreakR on five randomly selected genes, then run through \link{mb_to_tibble}.
 \item \code{mball}: Results from running motifbreakR on \emph{all} genes, then run through \link{mb_to_tibble}.
