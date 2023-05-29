@@ -35,7 +35,7 @@ Suggests:
     rmarkdown,
     TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
 Remotes:
-    stephenturner/BSgenome.Cfamiliaris.UCSC.canFam3
+    stephenturner/TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
