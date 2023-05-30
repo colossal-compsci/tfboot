@@ -57,37 +57,35 @@ library(tfboot)
 mbres <- vignettedata$mbres
 mbres
 #> # A tibble: 449 × 10
-#>    gene_id  SNP_id       tf    pctRef pctAlt scoreRef scoreAlt effect alleleDiff
-#>    <chr>    <chr>        <chr>  <dbl>  <dbl>    <dbl>    <dbl> <chr>       <dbl>
-#>  1 ARHGAP30 38:21390808… ACE2   0.754  0.957     3.73     4.71 strong      0.980
-#>  2 ARHGAP30 38:21394731… ASCL1  0.882  0.774     4.68     4.13 weak       -0.558
-#>  3 ARHGAP30 38:21394731… ASCL1  0.857  0.726     5.75     4.91 strong     -0.846
-#>  4 ARHGAP30 38:21390808… AT5G…  0.861  0.692     4.29     3.48 strong     -0.808
-#>  5 ARHGAP30 38:21394731… Atoh1  0.997  0.848     6.19     5.29 strong     -0.901
-#>  6 ARHGAP30 38:21390808… BZIP…  0.765  0.860     4.98     5.57 weak        0.591
-#>  7 ARHGAP30 38:21394731… Bhlh…  0.746  0.853     4.98     5.68 weak        0.696
-#>  8 ARHGAP30 38:21394731… ERF0…  0.741  0.927     3.47     4.28 strong      0.811
-#>  9 ARHGAP30 38:21394731… ERF13  0.723  0.903     3.99     4.95 strong      0.966
-#> 10 ARHGAP30 38:21394731… ERF7   0.738  0.942     2.72     3.40 weak        0.678
+#>    gene_id  SNP_id          tf        pctRef pctAlt scoreRef scoreAlt effect alleleDiff alleleEffectSize
+#>    <chr>    <chr>           <chr>      <dbl>  <dbl>    <dbl>    <dbl> <chr>       <dbl>            <dbl>
+#>  1 ARHGAP30 38:21390808:T:C ACE2       0.754  0.957     3.73     4.71 strong      0.980           0.199 
+#>  2 ARHGAP30 38:21394731:T:C ASCL1      0.882  0.774     4.68     4.13 weak       -0.558          -0.105 
+#>  3 ARHGAP30 38:21394731:T:C ASCL1      0.857  0.726     5.75     4.91 strong     -0.846          -0.127 
+#>  4 ARHGAP30 38:21390808:T:C AT5G04390  0.861  0.692     4.29     3.48 strong     -0.808          -0.163 
+#>  5 ARHGAP30 38:21394731:T:C Atoh1      0.997  0.848     6.19     5.29 strong     -0.901          -0.145 
+#>  6 ARHGAP30 38:21390808:T:C BZIP52     0.765  0.860     4.98     5.57 weak        0.591           0.0918
+#>  7 ARHGAP30 38:21394731:T:C Bhlha15    0.746  0.853     4.98     5.68 weak        0.696           0.105 
+#>  8 ARHGAP30 38:21394731:T:C ERF096     0.741  0.927     3.47     4.28 strong      0.811           0.176 
+#>  9 ARHGAP30 38:21394731:T:C ERF13      0.723  0.903     3.99     4.95 strong      0.966           0.177 
+#> 10 ARHGAP30 38:21394731:T:C ERF7       0.738  0.942     2.72     3.40 weak        0.678           0.189 
 #> # ℹ 439 more rows
-#> # ℹ 1 more variable: alleleEffectSize <dbl>
 mball <- vignettedata$mball
 mball
 #> # A tibble: 34,053 × 10
-#>    gene_id SNP_id        tf    pctRef pctAlt scoreRef scoreAlt effect alleleDiff
-#>    <chr>   <chr>         <chr>  <dbl>  <dbl>    <dbl>    <dbl> <chr>       <dbl>
-#>  1 ACKR1   38:22769951:… ABF3   0.920  0.733     4.88     3.94 strong     -0.947
-#>  2 ACKR1   38:22769951:… ARG80  0.910  0.727     3.93     3.14 strong     -0.788
-#>  3 ACKR1   38:22769951:… CAMT…  0.916  0.703     4.09     3.17 strong     -0.921
-#>  4 ACKR1   38:22769951:… CAMT…  0.940  0.741     4.27     3.38 strong     -0.893
-#>  5 ACKR1   38:22769951:… HES1   0.863  0.682     4.90     3.90 strong     -0.997
-#>  6 ACKR1   38:22769951:… NHP10  0.881  0.716     5.41     4.43 strong     -0.981
-#>  7 ACKR1   38:22769951:… OJ10…  0.851  0.701     5.57     4.59 strong     -0.974
-#>  8 ACKR1   38:22769951:… SUT1   0.888  0.639     3.61     2.62 strong     -0.993
-#>  9 ACKR1   38:22769951:… ZNF8…  0.840  0.896     7.97     8.47 weak        0.498
-#> 10 ACKR1   38:22769951:… nuc-1  0.856  0.697     5.42     4.42 strong     -0.998
+#>    gene_id SNP_id          tf           pctRef pctAlt scoreRef scoreAlt effect alleleDiff alleleEffectSize
+#>    <chr>   <chr>           <chr>         <dbl>  <dbl>    <dbl>    <dbl> <chr>       <dbl>            <dbl>
+#>  1 ACKR1   38:22769951:C:T ABF3          0.920  0.733     4.88     3.94 strong     -0.947          -0.179 
+#>  2 ACKR1   38:22769951:C:T ARG80         0.910  0.727     3.93     3.14 strong     -0.788          -0.182 
+#>  3 ACKR1   38:22769951:C:T CAMTA2        0.916  0.703     4.09     3.17 strong     -0.921          -0.207 
+#>  4 ACKR1   38:22769951:C:T CAMTA3        0.940  0.741     4.27     3.38 strong     -0.893          -0.197 
+#>  5 ACKR1   38:22769951:C:T HES1          0.863  0.682     4.90     3.90 strong     -0.997          -0.176 
+#>  6 ACKR1   38:22769951:C:T NHP10         0.881  0.716     5.41     4.43 strong     -0.981          -0.160 
+#>  7 ACKR1   38:22769951:C:T OJ1058_F05.8  0.851  0.701     5.57     4.59 strong     -0.974          -0.149 
+#>  8 ACKR1   38:22769951:C:T SUT1          0.888  0.639     3.61     2.62 strong     -0.993          -0.245 
+#>  9 ACKR1   38:22769951:C:T ZNF816        0.840  0.896     7.97     8.47 weak        0.498           0.0530
+#> 10 ACKR1   38:22769951:C:T nuc-1         0.856  0.697     5.42     4.42 strong     -0.998          -0.158 
 #> # ℹ 34,043 more rows
-#> # ℹ 1 more variable: alleleEffectSize <dbl>
 ```
 
 Summarize motifbreakR results on our 5 genes of interest. This shows us
@@ -99,11 +97,9 @@ sizes, etc. See the vignette and `?mb_summarize` for details.
 mbsmry <- mb_summarize(mbres)
 mbsmry
 #> # A tibble: 1 × 7
-#>   ngenes nsnps nstrong alleleDiffAbsMean alleleDiffAbsSum alleleEffectSizeAbsM…¹
-#>    <int> <int>   <int>             <dbl>            <dbl>                  <dbl>
-#> 1      5   449     363             0.837             376.                  0.157
-#> # ℹ abbreviated name: ¹​alleleEffectSizeAbsMean
-#> # ℹ 1 more variable: alleleEffectSizeAbsSum <dbl>
+#>   ngenes nsnps nstrong alleleDiffAbsMean alleleDiffAbsSum alleleEffectSizeAbsMean alleleEffectSizeAbsSum
+#>    <int> <int>   <int>             <dbl>            <dbl>                   <dbl>                  <dbl>
+#> 1      5   449     363             0.837             376.                   0.157                   70.7
 ```
 
 Bootstrap resample motifbreakR results for all genes. Resample sets of 5
@@ -114,21 +110,19 @@ set.seed(42)
 mbboot <- mb_bootstrap(mball, ngenes=5, boots = 250)
 mbboot$bootwide
 #> # A tibble: 250 × 9
-#>     boot genes           ngenes nsnps nstrong alleleDiffAbsMean alleleDiffAbsSum
-#>    <int> <chr>            <int> <int>   <int>             <dbl>            <dbl>
-#>  1     1 HSD17B7;SLAMF9…      5  1463    1100             0.808            1182.
-#>  2     2 SLAMF7;LOC1110…      5   631     419             0.774             489.
-#>  3     3 GPATCH2;CDK18;…      5   342     258             0.810             277.
-#>  4     4 LOC111094614;L…      5   789     539             0.785             620.
-#>  5     5 LOC111094522;L…      5   608     435             0.800             486.
-#>  6     6 LOC111094613;S…      5   568     381             0.779             443.
-#>  7     7 PIGM;LOC111094…      5   991     706             0.799             792.
-#>  8     8 LEMD1;SH2D1B;F…      5   472     336             0.790             373.
-#>  9     9 FCER1G;LOC1110…      5   685     490             0.802             549.
-#> 10    10 EIF2D;LOC10215…      5   808     486             0.756             611.
+#>     boot genes                                                    ngenes nsnps nstrong alleleDiffAbsMean alleleDiffAbsSum alleleEffectSizeAbsMean alleleEffectSizeAbsSum
+#>    <int> <chr>                                                     <int> <int>   <int>             <dbl>            <dbl>                   <dbl>                  <dbl>
+#>  1     1 HSD17B7;SLAMF9;LOC102151674;LOC111094585;LOC102155451         5  1463    1100             0.808            1182.                   0.162                  236. 
+#>  2     2 SLAMF7;LOC111094577;LOC111094537;HSD17B7;LOC111094548         5   631     419             0.774             489.                   0.159                  100. 
+#>  3     3 GPATCH2;CDK18;LOC102153439;LOC111094501;LOC111094466          5   342     258             0.810             277.                   0.157                   53.6
+#>  4     4 LOC111094614;LOC111094516;CD1E;LOC111094588;LOC111094527      5   789     539             0.785             620.                   0.160                  126. 
+#>  5     5 LOC111094522;LOC111094553;FAM177B;LOC111094466;CNTN2          5   608     435             0.800             486.                   0.151                   91.8
+#>  6     6 LOC111094613;SLAMF9;RXRG;LOC111094514;APOA2                   5   568     381             0.779             443.                   0.147                   83.4
+#>  7     7 PIGM;LOC111094605;LOC111094471;LOC111094509;AIDA              5   991     706             0.799             792.                   0.159                  158. 
+#>  8     8 LEMD1;SH2D1B;FCER1A;CDK18;LOC111094593                        5   472     336             0.790             373.                   0.159                   74.9
+#>  9     9 FCER1G;LOC111094573;LOC111094582;LEMD1;LOC111094560           5   685     490             0.802             549.                   0.152                  104. 
+#> 10    10 EIF2D;LOC102152982;PPP1R15B;LOC111094577;LOC111094514         5   808     486             0.756             611.                   0.148                  120. 
 #> # ℹ 240 more rows
-#> # ℹ 2 more variables: alleleEffectSizeAbsMean <dbl>,
-#> #   alleleEffectSizeAbsSum <dbl>
 mbboot$bootdist
 #> # A tibble: 6 × 2
 #>   metric                  bootdist   
