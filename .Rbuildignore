@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 scratch
 tfboot.html
+^doc$
+^Meta$
+^README\.Rmd$

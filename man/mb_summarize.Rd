@@ -20,12 +20,13 @@ Summarizes motifbreakR results as a tibble from \link{mb_to_tibble}. See details
 \details{
 Summarizes motifbreakR results. Returns a tibble with columns indicating:
 \enumerate{
-\item \code{nsnps}: The number of SNPs total
-\item \code{nstrong}: The number of SNPs with a "strong" effect
-\item \code{alleleDiffAbsMean} The mean of the absolute values of the \code{alleleDiff} scores
-\item \code{alleleDiffAbsSum} The sum of the absolute values of the \code{alleleDiff} scores
-\item \code{alleleEffectSizeAbsMean} The mean of the absolute values of the \code{alleleEffectSize} scores
-\item \code{alleleEffectSizeAbsSum} The sum of the absolute values of the \code{alleleEffectSize} scores
+\item \code{ngenes}: The number of genes in the SNP set.
+\item \code{nsnps}: The number of SNPs total.
+\item \code{nstrong}: The number of SNPs with a "strong" effect.
+\item \code{alleleDiffAbsMean} The mean of the absolute values of the \code{alleleDiff} scores.
+\item \code{alleleDiffAbsSum} The sum of the absolute values of the \code{alleleDiff} scores.
+\item \code{alleleEffectSizeAbsMean} The mean of the absolute values of the \code{alleleEffectSize} scores.
+\item \code{alleleEffectSizeAbsSum} The sum of the absolute values of the \code{alleleEffectSize} scores.
 }
 }
 \examples{

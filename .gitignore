@@ -12,3 +12,5 @@
 *.drawio.bkp
 inst/doc
 tfboot.html
+/doc/
+/Meta/

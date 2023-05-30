@@ -1,10 +1,10 @@
 ---
-title: "Basic Usage"
+title: "Statistical analysis of TFBS disruption with tfboot"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{basic_usage}
+  %\VignetteIndexEntry{intro}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

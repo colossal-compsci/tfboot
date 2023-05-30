@@ -1,0 +1,73 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# tfboot
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of tfboot is to facilitate statistical analysis of SNPs disrupting transcription factor binding sites (TFBS) using bootstrapping resampling to create empirical null distributions.
+
+## Installation
+
+You can install the development version of tfboot from [GitHub](https://github.com/) with the code below. You'll need to replace `gh_pat` with your [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). 
+
+```{r, eval=FALSE}
+# First install devtools if you don't have it already
+# install.packages("devtools")
+
+# Set your personal access token
+gh_pat="12345-abcde-CHANGEME-67890-xyz"
+
+# Install directly from GitHub:
+devtools::install_github(repo = "https://github.com/colossal-compsci/tfboot", 
+                         auth_token = gh_pat, 
+                         upgrade = FALSE, 
+                         build_vignettes = TRUE, 
+                         force = TRUE, 
+                         dependencies = c("Imports", "Suggests"))
+```
+
+## Example
+
+See the full introductory vignette with:
+
+```{r, eval=FALSE}
+vignette("intro", package="tfboot")
+```
+
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(tfboot)
+## basic example code
+```
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
