@@ -179,12 +179,13 @@ mb_to_tibble <- function(mb, key_col="gene_id") {
 #' Summarizes motifbreakR results as a tibble from [mb_to_tibble]. See details.
 #'
 #' Summarizes motifbreakR results. Returns a tibble with columns indicating:
-#' 1. `nsnps`: The number of SNPs total
-#' 1. `nstrong`: The number of SNPs with a "strong" effect
-#' 1. `alleleDiffAbsMean` The mean of the absolute values of the `alleleDiff` scores
-#' 1. `alleleDiffAbsSum` The sum of the absolute values of the `alleleDiff` scores
-#' 1. `alleleEffectSizeAbsMean` The mean of the absolute values of the `alleleEffectSize` scores
-#' 1. `alleleEffectSizeAbsSum` The sum of the absolute values of the `alleleEffectSize` scores
+#' 1. `ngenes`: The number of genes in the SNP set.
+#' 1. `nsnps`: The number of SNPs total.
+#' 1. `nstrong`: The number of SNPs with a "strong" effect.
+#' 1. `alleleDiffAbsMean` The mean of the absolute values of the `alleleDiff` scores.
+#' 1. `alleleDiffAbsSum` The sum of the absolute values of the `alleleDiff` scores.
+#' 1. `alleleEffectSizeAbsMean` The mean of the absolute values of the `alleleEffectSize` scores.
+#' 1. `alleleEffectSizeAbsSum` The sum of the absolute values of the `alleleEffectSize` scores.
 #'
 #' @param mbtibble motifbreakR results summarized with [mb_to_tibble].
 #' @param key_col The name of the column used to key the txdb. Default `gene_id`. May be `transcript_id` or otherwise if you use a different value of `level` in [get_upstream_snps].

@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
@@ -17,9 +17,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-```
 
-```{r, echo=FALSE}
 # load the pre-cooked vignette data
 mbres <- tfboot::vignettedata$mbres
 mball <- tfboot::vignettedata$mball
@@ -51,19 +49,12 @@ devtools::install_github("https://github.com/colossal-compsci/tfboot", auth_toke
 
 First, load the libraries you need for this analysis. 
 
-```{r setup, message=FALSE}
+```{r libs, message=FALSE}
 library(BSgenome.Cfamiliaris.UCSC.canFam3)
 library(TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
 library(plyranges)
 library(motifbreakR)
 library(tfboot)
-```
-
-Make life easier by assigning these long objects to short names.
-
-```{r}
-bs <- BSgenome.Cfamiliaris.UCSC.canFam3
-tx <- TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
 ```
 
 Use `read_vcf()` to read in your VCF. The example used here is chromosome 38 from Kathleen's dog Rosie. Note that your VCF must be pre-filtered to only include variant sites. More information on how to do this can be found in the help page (`?read_vcf`).
@@ -79,7 +70,7 @@ The `get_upstream_snps()` function from tfboot takes in a SNP list and a TxDb ob
 Here we get the 5kb upstream promoter region of _all_ genes with _any_ SNPs (limited to chromosome 38 in this example).
 
 ```{r}
-prosnps <- get_upstream_snps(snps, txdb=tx)
+prosnps <- get_upstream_snps(snps, txdb=TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
 
 prosnps
 ```
@@ -145,6 +136,14 @@ mbres
 mball
 ```
 
+In reality, when you perform the motifbreakR results across the whole genome, the analysis will take some time (perhaps hours), depending on the number of cores allocated to the job. I recommend that once you perform this once for every gene in the genome, you save the compact tibble (`mball` in this example) using `save()` or `saveRDS()` to read in later, avoiding the need to re-run the genome-wide motifbreakR analysis each time. You can do this with something like this:
+
+```{r, eval=FALSE}
+# Save the data so you don't have to run this long-running analysis again
+saveRDS(mball, file="genome-wide-motifbreakr-results.rds")
+# Read them back in from a file
+mball <- readRDS(file="genome-wide-motifbreakr-results.rds")
+```
 
 ```{r, echo=FALSE, eval=FALSE}
 # Save the data
@@ -156,4 +155,92 @@ usethis::use_data(vignettedata, overwrite=TRUE)
 
 ## Assessing statistical signficance
 
+In our example above we have a set of five genes. We've run motifbreakR on SNPs in the 5kb upstream region of those genes, and we want to ask questions such as "are there statistically more SNPs in the promoters of _these_ five genes than a random selection of five genes?" or "do SNPs in the promoters of _these_ five genes statistically enriched for those that disrupt TFBS, more so than randomly selected genes?" The tfboot package can help answer these questions.
+
+We initially ran motifbreakR on our set of five genes of interest. To address the kinds of questions above, we could go back to the set of all genes (again, here just those limited to chromosome 38 for demonstration purposes), and randomly draw 1000 sets of 5 genes, run motifbreakR on SNPs in those promoters, then compare our stats to the empirical null distribution to obtain a p-value. However, running motifbreakR on five genes takes time. Imagine our gene set was 300 genes. Then we would need to run motifbreakR 300,000 times to generate our null distribution. Further, if we had _multiple_ gene sets, e.g., one with 100 genes, another with 500 genes, another with 400 genes, we would need to run motifbreakR 1,000,000 times to generate null distrubitions of 1,000 bootstraps for each of these intervals.
+
+Instead, we can generate the motifbreakR results for _all_ genes, do this only once, then save those results to file, as we've done above. Then, when we need to compute our bootstrap sampling to create the empirical null distribution, we only have to bootstrap precomputed results, rather than bootstrapping the motifbreakR procedure itself.
+
+Let's look again at our motifbreakR results on our genes of interest:
+
+```{r}
+# Look at the data
+mbres
+# How many genes
+length(unique(mbres$gene_id))
+# How many TFBS are disrupted for each gene?
+table(mbres$gene_id)
+# How many "strong" in each gene?
+table(mbres$gene_id, mbres$effect)
+```
+
+Now, let's review the motifbreakR on _all_ genes of interest
+
+```{r}
+# Look at the data (note the number of rows)
+mball
+# How many genes
+length(unique(mball$gene_id))
+# How many TFBS are disrupted for each gene? Just show the top 5
+table(mball$gene_id) |> 
+  sort(decreasing = TRUE) |> 
+  head(n=5)
+```
+
+The tfboot function `mb_summarize` will summarize the results from a motifbreakR analysis into a single-row table. See help for `?mb_summarize` for details. This returns a table with the following columns:
+
+1. `ngenes`: The number of genes in the SNP set.
+1. `nsnps`: The number of SNPs total.
+1. `nstrong`: The number of SNPs with a "strong" effect.
+1. `alleleDiffAbsMean` The mean of the absolute values of the `alleleDiff` scores.
+1. `alleleDiffAbsSum` The sum of the absolute values of the `alleleDiff` scores.
+1. `alleleEffectSizeAbsMean` The mean of the absolute values of the `alleleEffectSize` scores.
+1. `alleleEffectSizeAbsSum` The sum of the absolute values of the `alleleEffectSize` scores.
+
+Let's run it on our set of genes of interest:
+
+```{r}
+mbsmry <- mb_summarize(mbres)
+mbsmry
+```
+
+So, how do these numbers compare to, for example, the number of SNPs, number of strong effects, the average absolute allele difference, or average absolute effect size, from a set of SNPs in promoters in a randomly chosen sample of the same number of genes?
+
+We can use the `mb_bootstrap` function to generate an empirical null distribution given the precomputed set of motifbreakR for the universe of all genes. This function takes motifbreakR results as a tibble (from `mb_to_tibble`), draws `boots` random samples of `ngenes` genes, and returns as a list (1) a wide tibble with results for each bootstrap, and (2) another tibble with the distribution of each metric as a column. We set the random number generator for reproducibility, and we limit the number of bootstrap resamples here for speed.
+
+```{r}
+set.seed(42)
+mbboot <- mb_bootstrap(mball, ngenes=5, boots=250)
+mbboot$bootwide
+mbboot$bootdist
+```
+
+Finally, we can use the `mb_bootstats()` function to take in the summary on _our_ genes of interest (output from `mb_summary()`) and the bootstrapped empirical null distribution (from `mb_bootstrap()` run on motifbreakR results from _all_ genes), to compare our critical values (in `mbsmry` here) to our empirical null distribution (called `mbboot` here).
+
+```{r}
+bootstats <- mb_bootstats(mbsmry = mbsmry, mbboot = mbboot)
+bootstats
+```
+
+We can also visualize this graphically with the `plot_bootstats()` function, which takes the results from `mb_bootstats()` as input.
+
+```{r, fig.width=7, fig.height=5}
+plot_bootstats(bootstats)
+```
+
+
+From these results we see that with the exception of the average value of the absolute value of the allele difference score, there is no meaningful statistical enrichment of TFBS-disrupting SNPs in this set of genes compared to randomly selected genes. The p-value of `r bootstats$p[bootstats$metric=="alleleDiffAbsMean"]` is only marginally significant. After accounting for multiple testing with a Bonferroni or Benjamini-Hochberg false discovery rate correction, this statistical significance disappears.
+
+```{r}
+bootstats |> 
+  dplyr::mutate(p_bon=p.adjust(p, method="bonferroni")) |> 
+  dplyr::mutate(p_fdr=p.adjust(p, method="BH"))
+```
+
+
+## Session Information
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
 

@@ -4,7 +4,7 @@
 \name{tfboot-package}
 \alias{tfboot}
 \alias{tfboot-package}
-\title{tfboot: Bootstrapping and statistical analysis for TFBS-disrupting SNPs.}
+\title{tfboot: Bootstrapping and statistical analysis for TFBS-disrupting SNPs}
 \description{
 Bootstrap motifbreakR results for statistical analysis on TFBS-disrupting SNPs in upstream regions of a set of genes of interest.
 }
