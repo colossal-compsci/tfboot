@@ -8,3 +8,6 @@ tfboot.html
 tfboot_*.pdf
 tfboot.pdf
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
