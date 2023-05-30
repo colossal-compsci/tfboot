@@ -22,6 +22,7 @@ devtools::install(build_vignettes = TRUE, upgrade=FALSE)
 devtools::build_manual(pkg=".", path=".")
 file.rename(sprintf("tfboot_%s.pdf", packageVersion("tfboot")), "tfboot.pdf")
 postdoc::render_package_manual("tfboot", outdir=".")
+pkgdown::build_site()
 ```
 
 
