@@ -4,6 +4,8 @@
 # tfboot
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of tfboot is to facilitate statistical analysis of SNPs

@@ -28,6 +28,7 @@ postdoc::render_package_manual("tfboot", outdir=".")
 # tfboot
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of tfboot is to facilitate statistical analysis of SNPs disrupting transcription factor binding sites (TFBS) using bootstrapping resampling to create empirical null distributions.

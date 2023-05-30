@@ -7,3 +7,4 @@ tfboot.html
 ^README\.Rmd$
 tfboot_*.pdf
 tfboot.pdf
+^\.github$
