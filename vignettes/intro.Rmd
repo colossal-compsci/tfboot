@@ -155,11 +155,15 @@ usethis::use_data(vignettedata, overwrite=TRUE)
 
 ## Assessing statistical signficance
 
+### Motivation
+
 In our example above we have a set of five genes. We've run motifbreakR on SNPs in the 5kb upstream region of those genes, and we want to ask questions such as "are there statistically more SNPs in the promoters of _these_ five genes than a random selection of five genes?" or "do SNPs in the promoters of _these_ five genes statistically enriched for those that disrupt TFBS, more so than randomly selected genes?" The tfboot package can help answer these questions.
 
 We initially ran motifbreakR on our set of five genes of interest. To address the kinds of questions above, we could go back to the set of all genes (again, here just those limited to chromosome 38 for demonstration purposes), and randomly draw 1000 sets of 5 genes, run motifbreakR on SNPs in those promoters, then compare our stats to the empirical null distribution to obtain a p-value. However, running motifbreakR on five genes takes time. Imagine our gene set was 300 genes. Then we would need to run motifbreakR 300,000 times to generate our null distribution. Further, if we had _multiple_ gene sets, e.g., one with 100 genes, another with 500 genes, another with 400 genes, we would need to run motifbreakR 1,000,000 times to generate null distrubitions of 1,000 bootstraps for each of these intervals.
 
 Instead, we can generate the motifbreakR results for _all_ genes, do this only once, then save those results to file, as we've done above. Then, when we need to compute our bootstrap sampling to create the empirical null distribution, we only have to bootstrap precomputed results, rather than bootstrapping the motifbreakR procedure itself.
+
+### Demonstration
 
 Let's look again at our motifbreakR results on our genes of interest:
 
@@ -237,6 +241,13 @@ bootstats |>
   dplyr::mutate(p_fdr=p.adjust(p, method="BH"))
 ```
 
+### Caveats
+
+**The set of motifbreakR results for all genes must be recomputed on each new sample.** This vignette demonstrates how to precompute the motifbreakR results _once_ for the universe of all genes. You can use this precomputed set to very quickly bootstrap an empirical null distribution of a set of _k_ randomly selected genes. However, this background set is unique to each sample. Each sample will have a different set of SNPs, and this precomputing procedure computes motifbreakR results for SNPs in upstream regions of all genes. Similarly, if the upstream region changes from the default 5,000 bp, results for all genes will need to be recomputed again.
+
+**SNP density matters.** Promoter regions with a larger number of SNPs are going to have larger values for the sum of the absolute values of the allele difference and effect sizes. This should not affect the mean of these metrics.
+
+**Genes, not transcripts.** This vignette demonstrates running motifbreakR on SNPs in 5kb upstream regions defined by _genes_ (see the help for `?get_upstream` and `?get_upstream_snps` and `?GenomicFeatures::genes`). This is using the most 5' transcript as _the_ transcription start site, and looking 5kb upstream of that position. This does not consider alternative transcription start sites. Further development is required to contend with multiple sets of TFBS motif disruption scores for the same gene if transcripts are to be used.
 
 ## Session Information
 

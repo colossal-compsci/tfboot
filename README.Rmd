@@ -13,6 +13,16 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r build, include=FALSE, eval=FALSE}
+devtools::build_readme()
+devtools::build_vignettes()
+devtools::install(build_vignettes = TRUE, upgrade=FALSE)
+devtools::build_manual(pkg=".", path=".")
+file.rename(sprintf("tfboot_%s.pdf", packageVersion("tfboot")), "tfboot.pdf")
+postdoc::render_package_manual("tfboot", outdir=".")
+```
+
+
 # tfboot
 
 <!-- badges: start -->
@@ -40,7 +50,7 @@ devtools::install_github(repo = "https://github.com/colossal-compsci/tfboot",
                          dependencies = c("Imports", "Suggests"))
 ```
 
-## Example
+## Documentation
 
 See the full introductory vignette with:
 
@@ -48,26 +58,53 @@ See the full introductory vignette with:
 vignette("intro", package="tfboot")
 ```
 
+## Example
 
-This is a basic example which shows you how to solve a common problem:
+Let's use an example from the vignette. First, let's load some pre-baked motifbreakR results. `mbres` is a set of motifbreakR results run on SNPs in the 5kb promoter region of a random selection of 5 genes. `mball` is the precomputed set of motifbreakR results run on SNPs in the promoter region of _all_ genes. 
 
-```{r example}
+```{r, include=FALSE}
+library(tibble)
 library(tfboot)
-## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
+```{r}
+library(tfboot)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r}
+mbres <- vignettedata$mbres
+mbres
+mball <- vignettedata$mball
+mball
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+Summarize motifbreakR results on our 5 genes of interest. This shows us the actual values for the number of SNPs in the upstream regions of these genes, and summary statistics on the allele differences, effect sizes, etc. See the vignette and `?mb_summarize` for details.
+
+```{r}
+mbsmry <- mb_summarize(mbres)
+mbsmry
+```
+
+Bootstrap resample motifbreakR results for all genes. Resample sets of 5 genes 250 times.
+
+```{r}
+set.seed(42)
+mbboot <- mb_bootstrap(mball, ngenes=5, boots = 250)
+mbboot$bootwide
+mbboot$bootdist
+```
+
+Compare the values from our five genes of interest to the empirical null distribution from bootstrap resampling.
+
+```{r}
+bootstats <- mb_bootstats(mbsmry, mbboot)
+bootstats
+```
+
+Visualize the results:
+
+```{r plot_bootstats, fig.width=7, fig.height=5}
+plot_bootstats(bootstats)
+```
+
+See `vignette("intro", package="tfboot")` for more.

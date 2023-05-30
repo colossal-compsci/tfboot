@@ -5,3 +5,5 @@ tfboot.html
 ^doc$
 ^Meta$
 ^README\.Rmd$
+tfboot_*.pdf
+tfboot.pdf
