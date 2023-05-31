@@ -11,3 +11,5 @@ tfboot.pdf
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+app.yaml
+.gcloudignore

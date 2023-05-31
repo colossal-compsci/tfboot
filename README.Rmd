@@ -25,6 +25,10 @@ postdoc::render_package_manual("tfboot", outdir=".")
 pkgdown::build_site()
 ```
 
+```{r, eval=FALSE, include=FALSE}
+system("gcloud app deploy --quiet")
+```
+
 
 # tfboot
 
