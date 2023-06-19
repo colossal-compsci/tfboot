@@ -100,7 +100,7 @@ get_upstream_snps <- function(snps, txdb, level="genes", ...) {
     stop("level must be either 'genes' or 'transcripts'")
   }
   # Get upstream intervals of those features
-  upstream <- get_upstream(features, ...)
+  upstream <- suppressWarnings(get_upstream(features, ...))
   # Intersect with SNPs to get SNPs in those upstream regions
   upstreamsnps <- plyranges::join_overlap_intersect(snps, upstream)
   # Set an attribute to check later if needed
