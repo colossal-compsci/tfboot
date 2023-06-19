@@ -34,12 +34,15 @@ An example question might be: we have these 123 genes of interest that we think 
 
 ### Setup
 
-To run this vignette, you'll need the dog BSGenome, plyranges, and motifbreakR packages, which can be installed from bioconductor. You'll also need to install this tfboot package, which you can do from source, or directly from GitHub with your [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+To run this vignette, you'll need the chicken BSGenome+TxDb+org.db packages, plyranges, and motifbreakR packages, which can be installed from bioconductor. You'll also need to install this tfboot package, which you can do from source, or directly from GitHub with your [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
 ```{r, eval=FALSE}
 install.packages("BiocManager")
-BiocManager::install(c("BSgenome.Cfamiliaris.UCSC.canFam3", "plyranges", "motifbreakR"), update=FALSE)
-BiocManager::install("https://github.com/stephenturner/TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq", update=FALSE)
+BiocManager::install(c("BSgenome.Ggallus.UCSC.galGal6", 
+                       "org.Gg.eg.db", 
+                       "TxDb.Ggallus.UCSC.galGal6.refGene", 
+                       "plyranges", 
+                       "motifbreakR"), update=FALSE)
 
 install.packages("devtools")
 devtools::install_github("https://github.com/colossal-compsci/tfboot", auth_token="REPLACE_WITH_YOUR_PAT", upgrade=FALSE)
@@ -50,27 +53,28 @@ devtools::install_github("https://github.com/colossal-compsci/tfboot", auth_toke
 First, load the libraries you need for this analysis. 
 
 ```{r libs, message=FALSE}
-library(BSgenome.Cfamiliaris.UCSC.canFam3)
-library(TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
+library(BSgenome.Ggallus.UCSC.galGal6)
+library(TxDb.Ggallus.UCSC.galGal6.refGene)
+library(org.Gg.eg.db)
 library(plyranges)
 library(motifbreakR)
 library(tfboot)
 ```
 
-Use `read_vcf()` to read in your VCF. The example used here is chromosome 38 from Kathleen's dog Rosie. Note that your VCF must be pre-filtered to only include variant sites. More information on how to do this can be found in the help page (`?read_vcf`).
+Use `read_vcf()` to read in your VCF. The example used here is a VCF with variants from chicken (_Gallus gallus_) chromosome 33. Note that your VCF must be pre-filtered to only include variant sites. More information on how to do this can be found in the help page (`?read_vcf`).
 
 ```{r}
-vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
-snps <- read_vcf(file=vcf_file, bsgenome=BSgenome.Cfamiliaris.UCSC.canFam3)
+vcf_file <- system.file("extdata", "galGal6-chr33.vcf.gz", package="tfboot", mustWork = TRUE)
+snps <- read_vcf(file=vcf_file, bsgenome=BSgenome.Ggallus.UCSC.galGal6)
 snps
 ```
 
-The `get_upstream_snps()` function from tfboot takes in a SNP list and a TxDb object, and turns intervals 5kb upstream of the transcription start site for all genes in the list. See the help for `?get_upstream_snps()` and the helper function it calls, `get_upstream()`. This function also respects strand information embedded in the genome. For an example on building a TxDb object from a GTF, see `?GenomicFeatures::makeTxDbPackage`. The code used to create the canFam3 TxDb object is [here on GitHub](https://github.com/stephenturner/TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq/tree/a95e7cf7275254696545c35efb0533831b48c42c#how-it-was-made).
+The `get_upstream_snps()` function from tfboot takes in a SNP list and a TxDb object, and turns intervals 5kb upstream of the transcription start site for all genes in the list. See the help for `?get_upstream_snps()` and the helper function it calls, `get_upstream()`. This function also respects strand information embedded in the genome. For an example on building a TxDb object from a GTF, see `?GenomicFeatures::makeTxDbPackage`. The code used to create the canFam3 TxDb object is [here on GitHub](https://github.com/stephenturner/TxDb.Ggallus.UCSC.galGal6.refGene/tree/a95e7cf7275254696545c35efb0533831b48c42c#how-it-was-made).
 
-Here we get the 5kb upstream promoter region of _all_ genes with _any_ SNPs (limited to chromosome 38 in this example).
+Here we get the 5kb upstream promoter region of _all_ genes with _any_ SNPs (limited to chromosome 33 in this example).
 
 ```{r}
-prosnps <- get_upstream_snps(snps, txdb=TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
+prosnps <- get_upstream_snps(snps, txdb=TxDb.Ggallus.UCSC.galGal6.refGene)
 
 prosnps
 ```
@@ -78,10 +82,20 @@ prosnps
 Now, let's select a set of five random genes of interest.
 
 ```{r}
-set.seed(2341)
+set.seed(123)
 mygenes <- sample(unique(prosnps$gene_id), 5)
 mygenes
 ```
+
+What are those genes?
+
+```{r}
+AnnotationDbi::select(org.Gg.eg.db, 
+                      key=mygenes, 
+                      columns=c("ENTREZID", "SYMBOL", "GENENAME"), 
+                      keytype="ENTREZID")
+```
+
 
 We can then pull out SNPs in the 5kb promoter region of just those SNPs.
 
@@ -118,7 +132,7 @@ Now, let's run motifbreakR on these SNPs in the promoter regions of these `r len
 mbresGR <- motifbreakR(myprosnps, pwmList=motifs)
 ```
 
-Additionally, let's run motifbreakR on _all_ SNPs for promoter regions in _all_ genes (remember, this entire analysis is restricted to chromosome 38 only).
+Additionally, let's run motifbreakR on _all_ SNPs for promoter regions in _all_ genes (remember, this entire analysis is restricted to chromosome 33 only).
 
 ```{r, eval=FALSE}
 mballGR <- motifbreakR(prosnps, pwmList=motifs)
@@ -159,7 +173,7 @@ usethis::use_data(vignettedata, overwrite=TRUE)
 
 In our example above we have a set of five genes. We've run motifbreakR on SNPs in the 5kb upstream region of those genes, and we want to ask questions such as "are there statistically more SNPs in the promoters of _these_ five genes than a random selection of five genes?" or "do SNPs in the promoters of _these_ five genes statistically enriched for those that disrupt TFBS, more so than randomly selected genes?" The tfboot package can help answer these questions.
 
-We initially ran motifbreakR on our set of five genes of interest. To address the kinds of questions above, we could go back to the set of all genes (again, here just those limited to chromosome 38 for demonstration purposes), and randomly draw 1000 sets of 5 genes, run motifbreakR on SNPs in those promoters, then compare our stats to the empirical null distribution to obtain a p-value. However, running motifbreakR on five genes takes time. Imagine our gene set was 300 genes. Then we would need to run motifbreakR 300,000 times to generate our null distribution. Further, if we had _multiple_ gene sets, e.g., one with 100 genes, another with 500 genes, another with 400 genes, we would need to run motifbreakR 1,000,000 times to generate null distrubitions of 1,000 bootstraps for each of these intervals.
+We initially ran motifbreakR on our set of five genes of interest. To address the kinds of questions above, we could go back to the set of all genes (again, here just those limited to chromosome 33 for demonstration purposes), and randomly draw 1000 sets of 5 genes, run motifbreakR on SNPs in those promoters, then compare our stats to the empirical null distribution to obtain a p-value. However, running motifbreakR on five genes takes time. Imagine our gene set was 300 genes. Then we would need to run motifbreakR 300,000 times to generate our null distribution. Further, if we had _multiple_ gene sets, e.g., one with 100 genes, another with 500 genes, another with 400 genes, we would need to run motifbreakR 1,000,000 times to generate null distrubitions of 1,000 bootstraps for each of these intervals.
 
 Instead, we can generate the motifbreakR results for _all_ genes, do this only once, then save those results to file, as we've done above. Then, when we need to compute our bootstrap sampling to create the empirical null distribution, we only have to bootstrap precomputed results, rather than bootstrapping the motifbreakR procedure itself.
 
@@ -233,13 +247,7 @@ plot_bootstats(bootstats)
 ```
 
 
-From these results we see that with the exception of the average value of the absolute value of the allele difference score, there is no meaningful statistical enrichment of TFBS-disrupting SNPs in this set of genes compared to randomly selected genes. The p-value of `r bootstats$p[bootstats$metric=="alleleDiffAbsMean"]` is only marginally significant. After accounting for multiple testing with a Bonferroni or Benjamini-Hochberg false discovery rate correction, this statistical significance disappears.
-
-```{r}
-bootstats |> 
-  dplyr::mutate(p_bon=p.adjust(p, method="bonferroni")) |> 
-  dplyr::mutate(p_fdr=p.adjust(p, method="BH"))
-```
+From these results we see that there is no meaningful statistical enrichment of TFBS-disrupting SNPs in this set of genes compared to randomly selected genes (this is expected -- our five genes _were_ randomly chosen). 
 
 ### Caveats
 
