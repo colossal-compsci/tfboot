@@ -30,14 +30,12 @@ Imports:
     tibble,
     tidyr
 Suggests: 
-    BSgenome.Cfamiliaris.UCSC.canFam3,
+    BSgenome.Ggallus.UCSC.galGal6,
+    TxDb.Ggallus.UCSC.galGal6.refGene,
     knitr,
-    rmarkdown,
-    TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
-Remotes:
-    stephenturner/TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
+    rmarkdown
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 4.2.0)
 LazyData: true
 Language: en-US
