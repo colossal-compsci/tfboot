@@ -2,6 +2,8 @@ library(BSgenome.Ggallus.UCSC.galGal6)
 library(TxDb.Ggallus.UCSC.galGal6.refGene)
 library(VariantAnnotation)
 
+set.seed(2023-06-19)
+
 makesnp <- function(x) {
   if (x=="N") return("N")
   nt <- c("A", "C", "G", "T")
@@ -29,7 +31,7 @@ for (chr_name in names(chromosome_lengths)) {
   if (chr_name!="chr33") next
 
   # Generate random positions for the SNPs
-  snp_positions <- sort(sample(1:chromosome_lengths[chr_name], num_snps))
+  snp_positions <- sort(sample(10000:(chromosome_lengths[chr_name]-10000), num_snps))
 
   # Generate GRanges object for this chromosome
   chr_snps <- GRanges(seqnames = chr_name,
@@ -41,7 +43,9 @@ for (chr_name in names(chromosome_lengths)) {
 }
 
 # Make the VCF
-vcf <- VCF(rowRanges = simulated_snps, colData=DataFrame(Samples=1L, row.names = "sample1"))
+vcf <- VCF(rowRanges = simulated_snps,
+           colData=DataFrame(Samples=1L, row.names = "sample1"),
+           exptData=list(header=VCFHeader()))
 
 # Set ref alleles (DNAStringSet)
 ref(vcf) <- getSeq(bsgenome, simulated_snps)
@@ -57,8 +61,15 @@ alt(vcf) <-
 # Set the genotypes
 assays(vcf, withDimnames=FALSE) <- list(GT=matrix(rep("1/1", length(vcf)), ncol=1, dimnames = list(NULL, "sample1")))
 
-# Write the VCF and look at a few
-vcffile <- here::here("inst/extdata/galGal6-chr38.vcf")
+
+# Write the VCF
+vcffile <- here::here("inst/extdata/galGal6-chr33.vcf")
 writeVcf(vcf, vcffile)
-system(paste("head -n10", vcffile))
-system(paste("bgzip", vcffile))
+system(paste0("head -n10 ", vcffile))
+
+# Make it spec compliant
+system(paste0("gsed -i '1 i##fileformat=VCFv4.3' ", vcffile))
+system(paste0("bgzip -f ", vcffile))
+system(paste0("tabix -f ", vcffile, ".gz"))
+system(paste0("bcftools view ", vcffile, ".gz | head -n10"))
+
