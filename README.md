@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tfboot
+# tfboot <a href='https://github.com/colossal-compsci/tfboot/'><img src='man/figures/logo.png' align="right" height="200" /></a>
 
 <!-- badges: start -->
 

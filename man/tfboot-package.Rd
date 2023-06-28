@@ -6,6 +6,8 @@
 \alias{tfboot-package}
 \title{tfboot: Bootstrapping and statistical analysis for TFBS-disrupting SNPs}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Bootstrap motifbreakR results for statistical analysis on TFBS-disrupting SNPs in upstream regions of a set of genes of interest.
 }
 \seealso{
