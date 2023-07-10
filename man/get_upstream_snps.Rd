@@ -23,13 +23,12 @@ Get SNPs upstream of gene regions. Input SNPs read in with \link{read_vcf} and a
 }
 \examples{
 \dontrun{
-library(BSgenome.Cfamiliaris.UCSC.canFam3)
-library(TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
-bs <- BSgenome.Cfamiliaris.UCSC.canFam3
-tx <- TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
-vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
-snps <- read_vcf(vcf_file, BSgenome.Cfamiliaris.UCSC.canFam3)
-snps
+library(BSgenome.Ggallus.UCSC.galGal6)
+library(TxDb.Ggallus.UCSC.galGal6.refGene)
+bs <- BSgenome.Ggallus.UCSC.galGal6
+tx <- TxDb.Ggallus.UCSC.galGal6.refGene
+vcf_file <- system.file("extdata", "galGal6-chr33.vcf.gz", package="tfboot", mustWork = TRUE)
+snps <- read_vcf(vcf_file, BSgenome.Ggallus.UCSC.galGal6)
 upstreamsnps <- get_upstream_snps(snps=snps, txdb=tx, level="genes")
 upstreamsnps
 }

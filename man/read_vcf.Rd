@@ -29,9 +29,9 @@ can be accomplished with bcftools:
 }
 \examples{
 \dontrun{
-library(BSgenome.Cfamiliaris.UCSC.canFam3)
-vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
-snps <- read_vcf(vcf_file, BSgenome.Cfamiliaris.UCSC.canFam3)
+library(BSgenome.Ggallus.UCSC.galGal6)
+vcf_file <- system.file("extdata", "galGal6-chr33.vcf.gz", package="tfboot", mustWork = TRUE)
+snps <- read_vcf(vcf_file, BSgenome.Ggallus.UCSC.galGal6)
 snps
 }
 }

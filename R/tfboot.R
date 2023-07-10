@@ -19,9 +19,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(BSgenome.Cfamiliaris.UCSC.canFam3)
-#' vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
-#' snps <- read_vcf(vcf_file, BSgenome.Cfamiliaris.UCSC.canFam3)
+#' library(BSgenome.Ggallus.UCSC.galGal6)
+#' vcf_file <- system.file("extdata", "galGal6-chr33.vcf.gz", package="tfboot", mustWork = TRUE)
+#' snps <- read_vcf(vcf_file, BSgenome.Ggallus.UCSC.galGal6)
 #' snps
 #' }
 read_vcf <- function(file, bsgenome) {
@@ -77,13 +77,12 @@ get_upstream <- function(gr, width=5000L) {
 #'
 #' @examples
 #' \dontrun{
-#' library(BSgenome.Cfamiliaris.UCSC.canFam3)
-#' library(TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq)
-#' bs <- BSgenome.Cfamiliaris.UCSC.canFam3
-#' tx <- TxDb.Cfamiliaris.UCSC.canFam3.ncbiRefSeq
-#' vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
-#' snps <- read_vcf(vcf_file, BSgenome.Cfamiliaris.UCSC.canFam3)
-#' snps
+#' library(BSgenome.Ggallus.UCSC.galGal6)
+#' library(TxDb.Ggallus.UCSC.galGal6.refGene)
+#' bs <- BSgenome.Ggallus.UCSC.galGal6
+#' tx <- TxDb.Ggallus.UCSC.galGal6.refGene
+#' vcf_file <- system.file("extdata", "galGal6-chr33.vcf.gz", package="tfboot", mustWork = TRUE)
+#' snps <- read_vcf(vcf_file, BSgenome.Ggallus.UCSC.galGal6)
 #' upstreamsnps <- get_upstream_snps(snps=snps, txdb=tx, level="genes")
 #' upstreamsnps
 #' }
@@ -152,8 +151,6 @@ split_gr_by_id <- function(gr, key_col="gene_id") {
 #'
 #' @return A tibble containing the key column (usually `gene_id`), and a select number of other columns needed for downstream statistical analysis.
 #' @export
-#'
-#' @examples
 mb_to_tibble <- function(mb, key_col="gene_id") {
   stopifnot(inherits(mb, "GRanges"))
   standardcols <- c("SNP_id",
