@@ -1,14 +1,9 @@
-# gcloud app deploy
-# gcloud app browse
-# app engine: https://console.cloud.google.com/appengine?authuser=2&project=colossal-comp-sci&serviceId=default
-# iap: https://console.cloud.google.com/security/iap?authuser=2&project=colossal-comp-sci
-
 runtime: python39
-service: pkgdown
+service: tfboot
 handlers:
-- url: /tfboot/
+- url: /
   static_files: docs/index.html
   upload: docs/index.html
-- url: /tfboot/(.*)
+- url: /(.*)
   static_files: docs/\1
   upload: docs/(.*)

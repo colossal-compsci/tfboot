@@ -15,7 +15,7 @@ read_vcf(file, bsgenome)
 A GRanges object containing \code{SNP_id}, \code{REF}, and \code{ALT} columns.
 }
 \description{
-Helper function to read in data with \link[motifbreakR:snps.from.file]{motifbreakR::snps.from.file}.
+Helper function to read in SNP data from a VCF file.
 }
 \details{
 Note that the VCF \strong{must} be filtered to only contain variant sites (i.e.,
@@ -29,9 +29,9 @@ can be accomplished with bcftools:
 }
 \examples{
 \dontrun{
-library(BSgenome.Cfamiliaris.UCSC.canFam3)
-vcf_file <- system.file("extdata", "rosie38.vcf.gz", package="tfboot", mustWork = TRUE)
-snps <- read_vcf(vcf_file, BSgenome.Cfamiliaris.UCSC.canFam3)
+library(BSgenome.Ggallus.UCSC.galGal6)
+vcf_file <- system.file("extdata", "galGal6-chr33.vcf.gz", package="tfboot", mustWork = TRUE)
+snps <- read_vcf(vcf_file, BSgenome.Ggallus.UCSC.galGal6)
 snps
 }
 }

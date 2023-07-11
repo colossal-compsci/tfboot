@@ -1,6 +1,6 @@
 Package: tfboot
 Title: Bootstrapping and statistical analysis for TFBS-disrupting SNPs
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     c(person(given = "Stephen",
              family = "Turner",
@@ -22,14 +22,17 @@ Imports:
     GenomicFeatures,
     GenomicRanges,
     ggplot2,
-    motifbreakR,
+    MatrixGenerics,
     MotifDb,
     plyranges,
     purrr,
     rlang,
+    S4Vectors,
     tibble,
-    tidyr
+    tidyr,
+    VariantAnnotation
 Suggests: 
+    motifbreakR,
     BSgenome.Ggallus.UCSC.galGal6,
     TxDb.Ggallus.UCSC.galGal6.refGene,
     org.Gg.eg.db,
