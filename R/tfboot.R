@@ -1,6 +1,6 @@
 #' Read in SNPs from a VCF
 #'
-#' Helper function to read in data with [motifbreakR::snps.from.file].
+#' Helper function to read in SNP data from a VCF file.
 #'
 #' Note that the VCF **must** be filtered to only contain variant sites (i.e.,
 #' no `0/0`), or only homozygous alt sites if you choose (`0/1` or `1/1`). This
@@ -25,9 +25,14 @@
 #' snps
 #' }
 read_vcf <- function(file, bsgenome) {
-  stopifnot(file.exists(file))
-  stopifnot(inherits(bsgenome, "BSgenome"))
-  motifbreakR::snps.from.file(file, format = "vcf", search.genome = bsgenome)
+  if (!file.exists(file)) stop(sprintf("File doesn't exist: %s", file))
+  if (!inherits(bsgenome, "BSgenome")) stop("bsgenome must be a 'BSgenome' class object")
+  vcf <- VariantAnnotation::readVcf(file)
+  snps <- MatrixGenerics::rowRanges(vcf)
+  S4Vectors::mcols(snps)$SNP_id <- rownames(S4Vectors::mcols(snps))
+  S4Vectors::mcols(snps)$ALT <- unlist(S4Vectors::mcols(snps)$ALT)
+  attributes(snps)$genome.package <- bsgenome@pkgname
+  return(snps)
 }
 
 #' Get upstream intervals

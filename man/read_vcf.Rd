@@ -15,7 +15,7 @@ read_vcf(file, bsgenome)
 A GRanges object containing \code{SNP_id}, \code{REF}, and \code{ALT} columns.
 }
 \description{
-Helper function to read in data with \link[motifbreakR:snps.from.file]{motifbreakR::snps.from.file}.
+Helper function to read in SNP data from a VCF file.
 }
 \details{
 Note that the VCF \strong{must} be filtered to only contain variant sites (i.e.,
