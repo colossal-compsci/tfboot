@@ -25,46 +25,39 @@ postdoc::render_package_manual("tfboot", outdir=".")
 pkgdown::build_site()
 ```
 
-```{r, eval=FALSE, include=FALSE}
-system("gcloud app deploy --quiet")
-```
-
-
 # tfboot <a href='https://github.com/colossal-compsci/tfboot/'><img src='man/figures/logo.png' align="right" height="200" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://img.shields.io/badge/documentation-pkgdown-9164cc.svg)](https://colossal-compsci.github.io/tfboot)
+<!-- FIXME: Update this link -->
+<!-- [![bioRxiv](https://img.shields.io/badge/biorRxiv-2023.MM.DD.XXXXXX-b31b1b.svg)](https://www.biorxiv.org/) -->
 <!-- badges: end -->
 
 The goal of tfboot is to facilitate statistical analysis of SNPs disrupting transcription factor binding sites (TFBS) using bootstrapping resampling to create empirical null distributions.
 
+<!-- FIXME: Update with citation:  -->
+<!-- If you use tfboot, please consider citing the [paper](https://www.biorxiv.org/): Turner, S.D., et al. (2023). tfboot: Bootstrapping and statistical analysis for transcription factor binding site-disrupting variants in gene sets. bioRxiv 2023.MM.DD.XXXXXX. doi:FIXME. -->
+
 ## Installation
 
-You can install the development version of tfboot from [GitHub](https://github.com/) with the code below. You'll need to replace `gh_pat` with your [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). 
+You can install tfboot from [GitHub](https://github.com/) with the code below. To install only tfboot:
 
 ```{r, eval=FALSE}
-# First install devtools if you don't have it already
 # install.packages("devtools")
+devtools::install_github("colossal-compsci/tfboot")
+```
 
-# Set your personal access token
-gh_pat="12345-abcde-CHANGEME-67890-xyz"
+To install required and suggested packages, including motifbreakR and those needed to build the vignette:
 
-# Install directly from GitHub:
-devtools::install_github(repo = "https://github.com/colossal-compsci/tfboot", 
-                         auth_token = gh_pat, 
-                         upgrade = FALSE, 
+```{r, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("colossal-compsci/tfboot",
                          build_vignettes = TRUE, 
-                         force = TRUE, 
                          dependencies = c("Imports", "Suggests"))
 ```
 
-## Documentation
-
-See the full introductory vignette with:
-
-```{r, eval=FALSE}
-vignette("intro", package="tfboot")
-```
+See the [pkgdown documentation](https://colossal-compsci.github.io/tfboot) for an [introductory vignette](https://colossal-compsci.github.io/tfboot/articles/intro.html) and function documentation.
 
 ## Example
 
@@ -115,4 +108,4 @@ Visualize the results:
 plot_bootstats(bootstats)
 ```
 
-See `vignette("intro", package="tfboot")` for more.
+See `vignette("intro", package="tfboot")` or the articles on the [pkgdown documentation website](https://colossal-compsci.github.io/tfboot) for more.
