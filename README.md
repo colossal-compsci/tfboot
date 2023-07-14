@@ -20,7 +20,7 @@ resampling to create empirical null distributions.
 
 ## Installation
 
-You can install tfboot from [GitHub](https://github.com/) with the code
+You can install tfboot from [GitHub](https://github.com/colossal-compsci/tfboot) with the code
 below. To install only tfboot:
 
 ``` r
