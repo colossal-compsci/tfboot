@@ -11,7 +11,8 @@ Authors@R:
              role = "cph"))
 Description: Bootstrap motifbreakR results for statistical analysis on TFBS-disrupting SNPs in upstream regions of a set of genes of interest.
 License: file LICENSE
-URL: https://github.com/colossal-compsci/tfboot
+URL: https://github.com/colossal-compsci/tfboot,
+    https://colossal-compsci.github.io/tfboot/
 BugReports: https://github.com/colossal-compsci/tfboot/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
