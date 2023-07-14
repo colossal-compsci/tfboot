@@ -1,9 +1,0 @@
-runtime: python39
-service: tfboot
-handlers:
-- url: /
-  static_files: docs/index.html
-  upload: docs/index.html
-- url: /(.*)
-  static_files: docs/\1
-  upload: docs/(.*)

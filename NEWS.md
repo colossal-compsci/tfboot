@@ -1,3 +1,8 @@
+# tfboot 1.0.0
+
+- Public release. Documentation built with pkgdown at https://colossal-compsci.github.io/tfboot/.
+- Preprint on bioRxiv: FIXME
+
 # tfboot 0.2.1
 
 - Use simulated chicken in all `@examples` where previously used "Rosie" requiring a nonstandard package to run vignette examples.
