@@ -1,7 +1,7 @@
 # tfboot 1.0.0
 
 - Public release. Documentation built with pkgdown at https://colossal-compsci.github.io/tfboot/.
-- Preprint on bioRxiv: FIXME
+- Preprint on bioRxiv: Turner, S.D., et al. (2023). tfboot: Bootstrapping and statistical analysis for transcription factor binding site-disrupting variants in gene sets. bioRxiv 2023.07.14.549004. DOI: [10.1101/2023.07.14.549004](https://doi.org/10.1101/2023.07.14.549004).
 
 # tfboot 0.2.1
 

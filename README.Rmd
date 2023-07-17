@@ -30,14 +30,12 @@ pkgdown::build_site()
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/colossal-compsci/tfboot/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://img.shields.io/badge/documentation-pkgdown-9164cc.svg)](https://colossal-compsci.github.io/tfboot)
-<!-- FIXME: Update this link -->
-<!-- [![bioRxiv](https://img.shields.io/badge/biorRxiv-2023.MM.DD.XXXXXX-b31b1b.svg)](https://www.biorxiv.org/) -->
+[![bioRxiv](https://img.shields.io/badge/biorRxiv-2023.07.14.549004-b31b1b.svg)](https://doi.org/10.1101/2023.07.14.549004)
 <!-- badges: end -->
 
 The goal of tfboot is to facilitate statistical analysis of SNPs disrupting transcription factor binding sites (TFBS) using bootstrapping resampling to create empirical null distributions.
 
-<!-- FIXME: Update with citation:  -->
-<!-- If you use tfboot, please consider citing the [paper](https://www.biorxiv.org/): Turner, S.D., et al. (2023). tfboot: Bootstrapping and statistical analysis for transcription factor binding site-disrupting variants in gene sets. bioRxiv 2023.MM.DD.XXXXXX. doi:FIXME. -->
+If you use tfboot, please consider citing the [paper](https://www.biorxiv.org/content/10.1101/2023.07.14.549004): Turner, S.D., et al. (2023). tfboot: Bootstrapping and statistical analysis for transcription factor binding site-disrupting variants in gene sets. bioRxiv 2023.07.14.549004. DOI: [10.1101/2023.07.14.549004](https://doi.org/10.1101/2023.07.14.549004).
 
 ## Installation
 
