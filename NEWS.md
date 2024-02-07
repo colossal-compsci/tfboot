@@ -1,3 +1,7 @@
+# tfboot 1.0.1
+
+- Misc typos and minor fixes to vignette.
+
 # tfboot 1.0.0
 
 - Public release. Documentation built with pkgdown at https://colossal-compsci.github.io/tfboot/.

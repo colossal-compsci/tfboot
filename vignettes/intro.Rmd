@@ -34,7 +34,7 @@ An example question might be: we have these 123 genes of interest that we think 
 
 ### Setup
 
-To run this vignette, you'll need the chicken BSGenome+TxDb+org.db packages, plyranges, and motifbreakR packages, which can be installed from bioconductor. You'll also need to install this tfboot package, which you can do from source, or directly from GitHub with your [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+To run this vignette, you'll need the chicken BSGenome+TxDb+org.db packages, plyranges, and motifbreakR packages, which can be installed from bioconductor. You'll also need to install this tfboot package, which you can do from source, or directly from GitHub.
 
 ```{r, eval=FALSE}
 install.packages("BiocManager")
@@ -45,7 +45,7 @@ BiocManager::install(c("BSgenome.Ggallus.UCSC.galGal6",
                        "motifbreakR"), update=FALSE)
 
 install.packages("devtools")
-devtools::install_github("https://github.com/colossal-compsci/tfboot", auth_token="REPLACE_WITH_YOUR_PAT", upgrade=FALSE)
+devtools::install_github("https://github.com/colossal-compsci/tfboot", upgrade=FALSE)
 ```
 
 ## Basic usage
@@ -69,7 +69,7 @@ snps <- read_vcf(file=vcf_file, bsgenome=BSgenome.Ggallus.UCSC.galGal6)
 snps
 ```
 
-The `get_upstream_snps()` function from tfboot takes in a SNP list and a TxDb object, and turns intervals 5kb upstream of the transcription start site for all genes in the list. See the help for `?get_upstream_snps()` and the helper function it calls, `get_upstream()`. This function also respects strand information embedded in the genome. For an example on building a TxDb object from a GTF, see `?GenomicFeatures::makeTxDbPackage`. The code used to create the canFam3 TxDb object is [here on GitHub](https://github.com/stephenturner/TxDb.Ggallus.UCSC.galGal6.refGene/tree/a95e7cf7275254696545c35efb0533831b48c42c#how-it-was-made).
+The `get_upstream_snps()` function from tfboot takes in a SNP list and a TxDb object, and turns intervals 5kb upstream of the transcription start site for all genes in the list. See the help for `?get_upstream_snps()` and the helper function it calls, `get_upstream()`. This function also respects strand information embedded in the genome. For an example on building a TxDb object from a GTF, see `?GenomicFeatures::makeTxDbPackage`.
 
 Here we get the 5kb upstream promoter region of _all_ genes with _any_ SNPs (limited to chromosome 33 in this example).
 

@@ -14,6 +14,7 @@ Bootstrap motifbreakR results for statistical analysis on TFBS-disrupting SNPs i
 Useful links:
 \itemize{
   \item \url{https://github.com/colossal-compsci/tfboot}
+  \item \url{https://colossal-compsci.github.io/tfboot/}
   \item Report bugs at \url{https://github.com/colossal-compsci/tfboot/issues}
 }
 
