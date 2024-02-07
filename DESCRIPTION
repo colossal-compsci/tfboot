@@ -1,6 +1,6 @@
 Package: tfboot
 Title: Bootstrapping and statistical analysis for TFBS-disrupting SNPs
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     c(person(given = "Stephen",
              family = "Turner",
@@ -16,7 +16,7 @@ URL: https://github.com/colossal-compsci/tfboot,
 BugReports: https://github.com/colossal-compsci/tfboot/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 biocViews:
 Imports: 
     dplyr,
